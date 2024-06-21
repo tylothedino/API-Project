@@ -1,0 +1,12 @@
+// backend/.sequelizerc
+
+//Tells Sequelize where to generate and where to find certain files and folders
+
+const path = require('path');
+
+module.exports = {
+    config: path.resolve('config', 'database.js'),
+    'models-path': path.resolve('db', 'models'),
+    'seeders-path': path.resolve('db', 'seeders'),
+    'migrations-path': path.resolve('db', 'migrations')
+};
