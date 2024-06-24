@@ -1,5 +1,4 @@
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
@@ -25,13 +24,13 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        email: {
-          type: Sequelize.STRING(256),
+        username: {
+          type: Sequelize.STRING(30),
           allowNull: false,
           unique: true,
         },
-        username: {
-          type: Sequelize.STRING(30),
+        email: {
+          type: Sequelize.STRING(256),
           allowNull: false,
           unique: true,
         },
@@ -53,6 +52,7 @@ module.exports = {
       options
     );
   },
+
   async down(queryInterface, Sequelize) {
     options.tableName = "Users";
     return queryInterface.dropTable(options);
