@@ -16,13 +16,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       eventId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Events' },
+        allowNull: false,
+        onDelete: 'CASCADE'
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' },
+        allowNull: false,
+        onDelete: 'CASCADE'
       },
       status: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM,
+        values: ['attending', 'pending', 'waitlist']
       },
       createdAt: {
         allowNull: false,
