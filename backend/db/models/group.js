@@ -4,6 +4,7 @@ const { Model, Validator } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Group extends Model {
+    //User Association
     static associate(models) {
       Group.belongsTo(models.User, {
         foreignKey: 'organizerId'
