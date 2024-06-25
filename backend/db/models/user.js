@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId', onDelete: 'CASCADE', hooks: true
       });
 
+      User.hasMany(models.Attendance, {
+        foreignKey: 'userId', onDelete: 'CASCADE', hooks: true
+      });
+
     }
   };
 
