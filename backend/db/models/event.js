@@ -43,21 +43,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     price: {
-      type: DataTypes.INTEGER
+      type: DataTypes.FLOAT
     },
     startDate: {
       type: DataTypes.DATE,
-      validate: {
-        isAfter: Sequelize.literal('CURRENT_TIMESTAMP')
-      }
     },
     endDate: {
-      type: DataTypes.DATE,
-
-      //Would this work?
-      validate: {
-        isAfter: this.startDate
-      }
+      type: DataTypes.DATE
 
     }
   }, {
