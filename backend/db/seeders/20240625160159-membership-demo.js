@@ -1,6 +1,6 @@
 "use strict";
 
-const { EventImage } = require("../models");
+const { Membership } = require("../models");
 const bcrypt = require("bcryptjs");
 
 let options = {};
@@ -10,28 +10,27 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await EventImage.bulkCreate(
+    await Membership.bulkCreate(
       [
         {
-          eventId: 1,
-          url: 'https://picsum.photos/200/300',
-          preview: true
+          userId: 1,
+          groupId: 1,
+          status: 'co-host'
         },
         {
-          eventId: 2,
-          url: 'https://picsum.photos/200/300',
-          preview: false
+          userId: 2,
+          groupId: 2,
+          status: 'member'
         },
         {
-          eventId: 3,
-          url: 'https://picsum.photos/200/300',
-          preview: true
+          userId: 3,
+          groupId: 3,
+          status: 'co-host'
         },
         {
-          eventId: 3,
-          url: 'https://picsum.photos/200/300',
-          preview: true
-
+          userId: 3,
+          groupId: 1,
+          status: 'pending'
         },
       ],
       { validate: true }
@@ -39,12 +38,12 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "EventImages";
+    options.tableName = "Memberships";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        eventId: [1, 2, 3]
+        userId: [1, 2, 3]
       },
       {}
     );
