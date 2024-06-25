@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true
       });
 
+      Event.hasMany(models.GroupImage, {
+        foreignKey: 'groupId', onDelete: 'CASCADE', hooks: true
+      });
 
     }
   }
