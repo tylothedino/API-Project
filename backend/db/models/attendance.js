@@ -26,13 +26,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
-      references: { model: 'Events' }
+      references: { model: 'Event' }
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
-      references: { model: 'Users' }
+      references: { model: 'User' }
     },
     status: {
       type: DataTypes.ENUM('attending', 'pending', 'waitlist')
