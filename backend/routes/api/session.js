@@ -10,17 +10,18 @@ const { User } = require('../../db/models');
 
 const router = express.Router();
 
-
 const validateLogin = [
-    check('credential')
+    check("credential")
         .exists({ checkFalsy: true })
         .notEmpty()
-        .withMessage('Please provide a valid email or username.'),
-    check('password')
+        .withMessage("Email or username is required"),
+    check("password")
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a password.'),
-    handleValidationErrors
+        .withMessage("Password is required"),
+    handleValidationErrors,
 ];
+
+
 
 
 // Log in
@@ -29,6 +30,7 @@ router.post(
     validateLogin,
     async (req, res, next) => {
         const { credential, password } = req.body;
+        console.log(credential, ": ", password)
 
         const user = await User.unscoped().findOne({
             where: {
@@ -40,15 +42,17 @@ router.post(
         });
 
         if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-            const err = new Error('Login failed');
+            const err = new Error('Invalid credentials.');
             err.status = 401;
-            err.title = 'Login failed';
-            err.errors = { credential: 'The provided credentials were invalid.' };
+            // err.title = 'Login failed';
+            // err.errors = { message: 'Invalid credentials.' };
             return next(err);
         }
 
         const safeUser = {
             id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
             username: user.username,
         };
@@ -79,6 +83,8 @@ router.get(
         if (user) {
             const safeUser = {
                 id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 email: user.email,
                 username: user.username,
             };
