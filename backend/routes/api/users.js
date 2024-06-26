@@ -21,9 +21,12 @@ const validateSignup = [
         .isEmail()
         .withMessage("Invalid email"),
     check("username")
-        .exists({ checkFalsy: true })
         .isLength({ min: 4 })
         .withMessage("Please provide a username with at least 4 characters."),
+    check("username")
+        .exists({ checkFalsy: true })
+        .withMessage("Username is required."),
+
     check("username").not().isEmail().withMessage("Username cannot be an email."),
     check("password")
         .exists({ checkFalsy: true })
@@ -37,10 +40,28 @@ const validateSignup = [
 router.post(
     '/',
     validateSignup,
-    async (req, res) => {
+    async (req, res, next) => {
         const { email, password, username, firstName, lastName } = req.body;
         const hashedPassword = bcrypt.hashSync(password);
-        const user = await User.create({ email, username, hashedPassword, firstName, lastName });
+
+        let user;
+
+        //Try to create a user
+        try {
+            //An error is thrown here when there is a attribute error
+            user = await User.create({ email, username, hashedPassword, firstName, lastName });
+
+
+        }
+        //If the model validation/constraint finds and Error, catch the error and send it to the error handler
+        catch (err) {
+
+            err.message = 'User already exists';
+            err.errors = err.errors
+            err.status = 500;
+
+            return next(err)
+        }
 
         const safeUser = {
             id: user.id,
