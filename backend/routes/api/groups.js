@@ -7,6 +7,8 @@ const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth')
 const { Group, User, Membership, GroupImage, Organizer, Venue } = require('../../db/models');
 
 const { Sequelize, Op } = require('sequelize');
+const venuesRouter = require('./venues.js');
+const { createCheckSchema } = require('express-validator/lib/middlewares/schema.js');
 
 const group = express.Router();
 
@@ -134,16 +136,10 @@ group.post('/:groupId/images', [requireAuth], async (req, res, next) => {
 
     //====================================
 
-    const membershipStatus = await Membership.findAll({
-        attributes: {
-            userId: user.id,
-            groupId
-        }
-    });
 
     // console.log(membershipStatus.status);
 
-    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+    if (findGroup.organizerId !== user.id) {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
@@ -175,12 +171,7 @@ group.put('/:groupId', [requireAuth], async (req, res, next) => {
     const { user } = req;
     const groupId = req.params.groupId;
     const findGroup = await Group.findByPk(groupId);
-    const membershipStatus = await Membership.findAll({
-        attributes: {
-            userId: user.id,
-            groupId
-        }
-    });
+
 
 
     //Check to see if the group exists
@@ -193,7 +184,7 @@ group.put('/:groupId', [requireAuth], async (req, res, next) => {
     }
     //============================================
 
-    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+    if (findGroup.organizerId !== user.id) {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
@@ -215,18 +206,14 @@ group.put('/:groupId', [requireAuth], async (req, res, next) => {
 });
 
 
+
+//Delete a group by ID
 group.delete('/:groupId', [requireAuth], async (req, res, next) => {
 
     //Check to see if you have the correct role
     const { user } = req;
     const groupId = req.params.groupId;
     const findGroup = await Group.findByPk(groupId);
-    const membershipStatus = await Membership.findAll({
-        attributes: {
-            userId: user.id,
-            groupId
-        }
-    });
 
 
     //Check to see if the group exists
@@ -239,7 +226,7 @@ group.delete('/:groupId', [requireAuth], async (req, res, next) => {
     }
     //============================================
 
-    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+    if (findGroup.organizerId !== user.id) {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
@@ -255,5 +242,128 @@ group.delete('/:groupId', [requireAuth], async (req, res, next) => {
 
 
 });
+
+
+
+//VENUES
+
+group.get('/:groupId/venues', [requireAuth], async (req, res, next) => {
+
+    const { user } = req;
+    //Search for Group by ID
+    const groupId = req.params.groupId;
+    const findGroup = await Group.findByPk(groupId);
+
+
+    //If a group couldn't be found
+    if (!findGroup) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        return next(err);
+    }
+
+    //====================================
+
+    const membershipStatus = await Membership.findAll({
+        attributes: {
+            userId: user.id,
+            groupId
+        }
+    });
+
+    // console.log(membershipStatus.status);
+
+    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
+    }
+    //============================================
+
+    const Venues = await Venue.findAll({
+        where: {
+            groupId
+        }
+    });
+
+    return res.json({ Venues });
+
+});
+
+
+group.post('/:groupId/venues', [requireAuth], async (req, res, next) => {
+
+    const { user } = req;
+    //Search for Group by ID
+    const groupId = req.params.groupId;
+    const findGroup = await Group.findByPk(groupId);
+
+
+    //If a group couldn't be found
+    if (!findGroup) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        return next(err);
+    }
+
+    //====================================
+
+    const membershipStatus = await Membership.findAll({
+        attributes: {
+            userId: user.id,
+            groupId
+        }
+    });
+
+    // console.log(membershipStatus.status);
+
+    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
+    }
+
+    //============================================
+    const { address, city, state, lat, lng } = req.body;
+
+    let createVenue;
+
+    try {
+        createVenue = await Venue.create({
+            groupId, address, city, state, lat, lng
+        });
+
+        const result = {
+            id: createVenue.id,
+            groupId: createVenue.groupId,
+            address: createVenue.address,
+            city: createVenue.city,
+            state: createVenue.state,
+            lat: createVenue.lat,
+            lng: createVenue.lng
+        }
+
+    } catch (err) {
+        err.message = 'Bad Request';
+        err.errors = err.errors
+        err.status = 500;
+
+        return next(err)
+    }
+
+    return res.json(result);
+
+});
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = group;
