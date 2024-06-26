@@ -54,21 +54,58 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: DataTypes.ENUM,
       values: ['Online', 'In person'],
-      allowNull: false
+      allowNull: false,
+      validate: {
+        correctValues(values) {
+          if (values.toLowerCase() !== 'online' || values.toLowerCase() !== 'in person') {
+            throw new Error("Type must be 'Online' or 'In person'");
+          }
+        }
+      }
     },
     private: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
+      type: {
+        type: DataTypes.BOOLEAN,
+        msg: 'Private must be a boolean!'
+      },
+      allowNull: false,
+      validate: {
+        isBoolean(value) {
+          if (value !== true && value !== false)
+            throw new Error('Private must be a boolean');
+        }
+      }
 
     },
     city: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: {
+        args: false,
+        msg: 'City is required'
+      },
+      validate: {
+        isNull(value) {
+          if (!value) {
+            throw new Error('City is required');
+          }
+        }
+      }
     },
     state: {
       type: DataTypes.STRING,
-      allowNull: false
-    }
+      allowNull: {
+        args: false,
+        msg: 'State is required'
+      },
+      validate: {
+        isNull(value) {
+          if (!value) {
+            throw new Error('State is required');
+          }
+        }
+      }
+    },
+
   }, {
     sequelize,
     modelName: 'Group',
