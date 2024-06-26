@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isNull(val) {
           if (!val) {
-            throw new Error('Address is required');
+            throw new Error('Street address is required');
           }
         }
       }
@@ -91,6 +91,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Venue',
+    defaultScope: {
+      attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng']
+    }
   });
   return Venue;
 };
