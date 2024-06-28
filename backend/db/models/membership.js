@@ -25,12 +25,26 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     status: {
       type: DataTypes.ENUM,
-      values: ['co-host', 'member', 'pending'],
-      allowNull: false
+      values: ['co-host', 'member'],
+      defaultValue: 'pending',
+      allowNull: false,
+      validate: {
+        ifPending(val) {
+          if (val.toLowerCase() === 'pending') {
+            throw new Error('Cannot change a membership status to pending')
+          }
+        },
+        ifNotParams(val) {
+          if (val.toLowerCase() !== 'co-host' && val.toLowerCase() !== 'member' && val.toLowerCase() !== 'pending') {
+            throw new Error('Status must be co-host or member');
+          }
+        }
+      }
     }
   }, {
     sequelize,
     modelName: 'Membership',
+    hooks: true
   });
   return Membership;
 };

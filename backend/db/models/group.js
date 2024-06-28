@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         correctValues(values) {
-          if (values.toLowerCase() !== 'online' || values.toLowerCase() !== 'in person') {
+          if (values.toLowerCase() !== 'online' && values.toLowerCase() !== 'in person') {
             throw new Error("Type must be 'Online' or 'In person'");
           }
         }

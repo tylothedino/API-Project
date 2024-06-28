@@ -25,11 +25,18 @@ venue.put('/:venueId', [requireAuth], async (req, res, next) => {
     }
 
 
-    const findGroup = await Group.findAll({
-        attributes: {
+    const findGroup = await Group.findOne({
+        where: {
             id: findVenue.groupId
         }
     })
+
+
+    if (!findGroup) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        return next(err);
+    }
 
     const membershipStatus = await Membership.findOne({
         where: {
@@ -38,15 +45,9 @@ venue.put('/:venueId', [requireAuth], async (req, res, next) => {
         }
     });
 
-
-    if (!findGroup) {
-        const err = new Error("Group couldn't be found");
-        err.status = 404;
-        return next(err);
-    }
     //============================================
 
-    if (findGroup.organizerId !== user.id || membershipStatus.status !== 'co-host') {
+    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
