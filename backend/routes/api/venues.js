@@ -32,7 +32,7 @@ venue.put('/:venueId', [requireAuth], async (req, res, next) => {
     })
 
     const membershipStatus = await Membership.findOne({
-        attributes: {
+        where: {
             userId: user.id,
             groupId: findGroup.id
         }
@@ -46,7 +46,7 @@ venue.put('/:venueId', [requireAuth], async (req, res, next) => {
     }
     //============================================
 
-    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+    if (findGroup.organizerId !== user.id || membershipStatus.status !== 'co-host') {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
