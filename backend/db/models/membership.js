@@ -25,12 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     status: {
       type: DataTypes.ENUM,
-      values: ['co-host', 'member'],
+      values: ['co-host', 'member', 'pending'],
       defaultValue: 'pending',
       allowNull: false,
       validate: {
         ifPending(val) {
-          if (val.toLowerCase() === 'pending') {
+          if (val.toLowerCase() === 'pending' || !this.status) {
             throw new Error('Cannot change a membership status to pending')
           }
         },

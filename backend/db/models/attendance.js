@@ -29,11 +29,25 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.ENUM,
       values: ['attending', 'waitlist', 'pending'],
-      allowNull: false
+      defaultValue: 'pending',
+      allowNull: false,
+      validate: {
+        ifPending(val) {
+          if (val.toLowerCase() === 'pending' && !this.status) {
+            throw new Error('Cannot change an attendance status to pending')
+          }
+        },
+        ifNotParams(val) {
+          if (val.toLowerCase() !== 'attending' && val.toLowerCase() !== 'waitlist' && val.toLowerCase() !== 'pending') {
+            throw new Error('Status must be attending or waitlist');
+          }
+        }
+      }
     }
   }, {
     sequelize,
     modelName: 'Attendance',
+    hooks: true
   });
   return Attendance;
 };

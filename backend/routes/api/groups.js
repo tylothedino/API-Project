@@ -744,24 +744,9 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
         }
     });
 
-    //Check their status input
-
-    // if (status === 'pending') {
-    //     const err = new Error("Cannot change a membership status to pending");
-    //     err.status = 400;
-    //     return next(err);
-    // }
-
-    // if (status !== 'co-host' && status !== 'member') {
-    //     const err = new Error("Status must be co-host or member");
-    //     err.status = 400;
-    //     return next(err);
-    // }
-
-
     //If they have credentials
 
-    if (status === 'co-host') {
+    if (status === 'co-host' && findGroup.organizerId === user.id) {
         if (findGroup.organizerId !== user.id) {
             const err = new Error("Forbidden");
             err.status = 403;
@@ -791,18 +776,28 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
             err.status = 403;
             return next(err);
         }
-    } else {
-        try {
-            await targetMember.update({
-                status
-            });
-        } catch (err) {
-            err.message = 'Bad Request';
-            err.errors = err.errors
-            err.status = 500;
 
-            return next(err)
+    } else {
+        if (status === 'pending') {
+            const err = new Error("Bad request");
+            err.errors = { status: 'Cannot change a membership status to pending' }
+            err.status = 400;
+            return next(err);
+        } else {
+            try {
+                await targetMember.update({
+                    status
+                });
+            } catch (err) {
+                err.message = 'Bad Request';
+                err.errors = err.errors
+                err.status = 500;
+
+                return next(err)
+            }
         }
+
+
     }
 
     targetMember.dataValues.memberId = targetMember.dataValues.userId
