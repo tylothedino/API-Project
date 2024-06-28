@@ -152,13 +152,14 @@ group.post('/:groupId/images', [requireAuth], async (req, res, next) => {
     const { url, preview } = req.body;
 
     const addImage = await GroupImage.create({
-        url, preview
+        url, preview, groupId
     });
 
     const result = {
         id: addImage.id,
         url: addImage.url,
-        preview: addImage.preview
+        preview: addImage.preview,
+
     }
 
     return res.json(result);
