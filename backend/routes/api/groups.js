@@ -743,6 +743,7 @@ group.get('/:groupId/members', async (req, res, next) => {
 group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
     const { user } = req;
     //Search for Group by ID
+
     const groupId = parseInt(req.params.groupId);
     const findGroup = await Group.findByPk(groupId);
 
@@ -761,7 +762,7 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             groupId: groupId
         }
     });
-
+    return res.json("I made it");
     //Check their membership
     if (membershipStatus) {
         if (membershipStatus.status === 'pending') {
@@ -769,13 +770,6 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             err.status = 400;
             return next(err);
         }
-
-        // else if (findGroup.organizerId === user.id && membershipStatus.status === 'member' || membershipStatus.status === 'co-host') {
-        //     const err = new Error("User is already a member of the group");
-        //     err.status = 404;
-        //     return next(err);
-        // }
-
         else {
             const err = new Error("User is already a member of the group");
             err.status = 404;
@@ -794,17 +788,13 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
                 groupId: groupId
             });
 
-            newMembership.toJSON().userId = newMembership.userId;
+            // newMembership.toJSON().userId = newMembership.userId;
 
 
 
             return res.json({ memberId: newMembership.userId, status: newMembership.status });
         }
     }
-
-
-
-
 
 });
 
