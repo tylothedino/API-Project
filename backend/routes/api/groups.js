@@ -493,7 +493,7 @@ group.get('/:groupId/events', async (req, res, next) => {
         ],
         group: ['Event.id']
     });
-
+    return res.body(Events);
     const flatten = await Promise.all(Events.map(async (event) => {
         const findPreviewImage = await EventImage.findOne({
             where: {
@@ -501,6 +501,9 @@ group.get('/:groupId/events', async (req, res, next) => {
             },
             attributes: ['url']
         });
+
+        //Find numattending
+
         return {
             ...event.toJSON(),
             startDate: changeDate(event.toJSON().startDate),
