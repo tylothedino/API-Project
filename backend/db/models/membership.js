@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.ENUM,
       values: ['co-host', 'member', 'pending'],
-      allowNull: false,
       validate: {
         ifNotParams(val) {
           if (val.toLowerCase() !== 'co-host' && val.toLowerCase() !== 'member' && val.toLowerCase() !== 'pending') {
