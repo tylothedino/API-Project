@@ -788,7 +788,7 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             });
 
             // newMembership.toJSON().userId = newMembership.userId;
-            return res.json({ memberId: newMembership.userId });
+            return res.json({ memberId: newMembership.userId, status: newMembership.status });
         }
     }
 

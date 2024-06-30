@@ -269,7 +269,7 @@ event.post('/:eventId/images', [requireAuth], async (req, res, next) => {
         }
     });
 
-    //Current User must be an attendee, host, or co-host of the event
+
 
     // if (userGroupMember) {
     //     if (userGroupMember.status !== 'co-host') {
@@ -287,18 +287,34 @@ event.post('/:eventId/images', [requireAuth], async (req, res, next) => {
 
     // }
 
+    // return res.json({ eventGroup, userGroupMember, attendanceStatus })
+
+
+
+    //Current User must be an attendee, host, or co-host of the event
     if (eventGroup.organizerId !== user.id) {
         if (userGroupMember) {
-            if (userGroupMember.status !== 'co-host' && attendanceStatus.status !== 'attending') {
-                const err = new Error("Forbidden");
-                err.status = 403;
-                return next(err);
+            if (userGroupMember.status !== 'co-host') {
+                if (attendanceStatus) {
+                    if (attendanceStatus.status !== 'attending') {
+                        const err = new Error("Forbidden");
+                        err.status = 403;
+                        return next(err);
+                    }
+                } else {
+                    const err = new Error("Forbidden");
+                    err.status = 403;
+                    return next(err);
+                }
+
             }
+
         } else {
             const err = new Error("Forbidden");
             err.status = 403;
             return next(err);
         }
+
     }
 
 
