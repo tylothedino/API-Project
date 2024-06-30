@@ -794,7 +794,7 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
 
 
 
-            return res.json({ memberId: newMembership.userId, status: newMembership.status });
+            return res.json({ memberId: newMembership.userId });
         }
     }
 
