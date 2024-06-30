@@ -787,7 +787,8 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
 
             const newMembership = await Membership.create({
                 userId: user.id,
-                groupId: groupId
+                groupId: groupId,
+                status: 'pending'
             });
 
             // newMembership.toJSON().userId = newMembership.userId;
