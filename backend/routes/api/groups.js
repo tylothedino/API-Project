@@ -784,7 +784,7 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             err.status = 404;
             return next(err);
         } else {
-            return res.json("This is where I found an error")
+
             const newMembership = await Membership.create({
                 userId: user.id,
                 groupId: groupId,
