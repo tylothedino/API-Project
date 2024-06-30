@@ -282,22 +282,40 @@ event.post('/:eventId/images', [requireAuth], async (req, res, next) => {
         }
     });
 
+    //Current User must be an attendee, host, or co-host of the event
 
+    // if (userGroupMember) {
+    //     if (userGroupMember.status !== 'co-host') {
+    //         const err = new Error("Forbidden");
+    //         err.status = 403;
+    //         return next(err);
+    //     }
+    // }
+    // else {
+    //     if (eventGroup.organizerId !== user.id) {
+    //         const err = new Error("Forbidden");
+    //         err.status = 403;
+    //         return next(err);
+    //     }
 
-    if (userGroupMember) {
-        if (userGroupMember.status !== 'co-host') {
+    // }
+
+    if (eventGroup.organizerId !== user.id) {
+        if (userGroupMember) {
+            if (userGroupMember.status !== 'co-host' && attendanceStatus.status !== 'attending') {
+                const err = new Error("Forbidden");
+                err.status = 403;
+                return next(err);
+            }
+        } else {
             const err = new Error("Forbidden");
             err.status = 403;
             return next(err);
         }
-    } else {
-        if (eventGroup.organizerId !== user.id) {
-            const err = new Error("Forbidden");
-            err.status = 403;
-            return next(err);
-        }
-
     }
+
+
+
 
 
     //If the User has the perms create a new Image and set it to the Event
@@ -380,9 +398,20 @@ event.put('/:eventId', [requireAuth], async (req, res, next) => {
 
     //If the User has the perms edit the event, update event
 
-    await findEvent.update({
-        venueId, name, type, capacity, price, description, startDate, endDate
-    })
+    try {
+        await findEvent.update({
+            venueId, name, type, capacity, price, description, startDate, endDate
+        });
+
+    } catch (err) {
+        err.message = 'Bad Request';
+        err.errors = err.errors
+        err.status = 500;
+        return next(err)
+
+    }
+
+
 
     delete findEvent.dataValues.updatedAt;
     findEvent.dataValues.startDate = changeDate(findEvent.dataValues.startDate);
@@ -616,6 +645,12 @@ event.post('/:eventId/attendance', [requireAuth], async (req, res, next) => {
 
     //Check if they are part of the group
     if (groupOrganizerId !== user.id && !groupMembership) {
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
+    }
+
+    if (groupMembership.status === 'pending') {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);

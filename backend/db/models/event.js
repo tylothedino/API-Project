@@ -28,7 +28,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Event.init({
-    venueId: DataTypes.INTEGER,
+    venueId: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isVenueExists(value) {
+          return sequelize.models.Venue.findByPk(value)
+            .then((result) => {
+              if (!result) {
+                this.venueId = undefined;
+              }
+            });
+        }
+      }
+    },
     groupId: DataTypes.INTEGER,
     name: {
       type: DataTypes.STRING,

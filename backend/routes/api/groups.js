@@ -360,6 +360,12 @@ group.get('/:groupId/venues', [requireAuth], async (req, res, next) => {
 
     // console.log(membershipStatus.status);
 
+    if (findGroup.organizerId !== user.id && !membershipStatus) {
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
+    }
+
     if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
         const err = new Error("Forbidden");
         err.status = 403;
@@ -403,7 +409,7 @@ group.post('/:groupId/venues', [requireAuth], async (req, res, next) => {
     });
 
     // console.log(membershipStatus.status);
-    if (!membershipStatus) {
+    if (findGroup.organizerId !== user.id && !membershipStatus) {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
@@ -539,15 +545,6 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
 
     //====================================
 
-    //If Venue couldn't be found
-
-    const findVenue = await Venue.findByPk(venueId);
-    if (!findVenue || type !== 'Online') {
-        const err = new Error("Venue couldn't be found");
-        err.status = 404;
-        return next(err);
-    }
-
 
     //====================================
 
@@ -560,7 +557,7 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
 
     // console.log(membershipStatus.status);
 
-    if (!membershipStatus) {
+    if (findGroup.organizerId !== user.id && !membershipStatus) {
         const err = new Error("Forbidden");
         err.status = 403;
         return next(err);
@@ -576,6 +573,8 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
 
     let createEvent;
 
+    //If Venue couldn't be found
+
     try {
         createEvent = await Event.create({
             venueId, name, type, capacity, price, description, startDate, endDate, groupId
@@ -585,9 +584,17 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
         err.message = 'Bad Request';
         err.errors = err.errors
         err.status = 500;
-
         return next(err)
+
     }
+    const findVenue = await Venue.findByPk(venueId);
+    if (!findVenue) {
+        const err = new Error("Venue couldn't be found");
+        err.status = 404;
+        return next(err);
+    }
+
+
 
     createEvent.groupId = groupId;
 
@@ -756,7 +763,15 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             const err = new Error("Membership has already been requested");
             err.status = 400;
             return next(err);
-        } else if (findGroup.organizerId === user.id && membershipStatus.status === 'member' || membershipStatus.status === 'co-host') {
+        }
+
+        // else if (findGroup.organizerId === user.id && membershipStatus.status === 'member' || membershipStatus.status === 'co-host') {
+        //     const err = new Error("User is already a member of the group");
+        //     err.status = 404;
+        //     return next(err);
+        // }
+
+        else {
             const err = new Error("User is already a member of the group");
             err.status = 404;
             return next(err);
@@ -781,6 +796,9 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             return res.json({ memberId: newMembership.userId, status: newMembership.status });
         }
     }
+
+
+
 
 
 });
@@ -846,7 +864,9 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
 
     //If they have credentials
 
-    if (status === 'co-host' || findGroup.organizerId === user.id) {
+
+
+    if (status === 'co-host') {
         if (findGroup.organizerId !== user.id) {
             const err = new Error("Forbidden");
             err.status = 403;
@@ -867,14 +887,28 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
         }
 
     } else if (status === 'member') {
-        if (membershipStatus.status === 'co-host' && findGroup.organizerId === user.id) {
-            await targetMember.update({
-                status
-            });
-        } else {
-            const err = new Error("Forbidden");
-            err.status = 403;
-            return next(err);
+        if (membershipStatus) {
+            if (membershipStatus.status === 'co-host') {
+                await targetMember.update({
+                    status
+                });
+            } else {
+                const err = new Error("Forbidden");
+                err.status = 403;
+                return next(err);
+            }
+        }
+        else {
+            if (findGroup.organizerId === user.id) {
+                await targetMember.update({
+                    status
+                });
+            } else {
+                const err = new Error("Forbidden");
+                err.status = 403;
+                return next(err);
+            }
+
         }
 
     } else {

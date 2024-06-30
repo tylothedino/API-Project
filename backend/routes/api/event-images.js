@@ -16,7 +16,11 @@ eventImage.delete('/:imageId', [requireAuth], async (req, res, next) => {
     const { user } = req;
 
     const imageId = parseInt(req.params.imageId);
-    const image = await EventImage.findByPk(imageId);
+    let image;
+    if (imageId) {
+        image = await EventImage.findByPk(imageId);
+    }
+
 
     if (!image) {
         const err = new Error("Event Image couldn't be found");
@@ -24,6 +28,7 @@ eventImage.delete('/:imageId', [requireAuth], async (req, res, next) => {
         return next(err);
 
     }
+
 
     //Grab the Event
     const imageEvent = await Event.findByPk(image.eventId);
