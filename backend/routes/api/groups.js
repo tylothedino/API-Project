@@ -475,12 +475,7 @@ group.get('/:groupId/events', async (req, res, next) => {
             groupId
         },
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'price', 'description', 'capacity'],
-            include: [
-                [
-                    Sequelize.fn("COUNT", Sequelize.col("Attendances.eventId")), "numAttending",
-                ]
-            ]
+            exclude: ['createdAt', 'updatedAt', 'price', 'description', 'capacity']
         },
         include: [
             {
