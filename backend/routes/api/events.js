@@ -97,7 +97,7 @@ event.get('/', goodQuery, async (req, res, next) => {
                 attributes: [
                     ['url', 'previewImage'],
                     [
-                        Sequelize.literal(`CASE WHEN EventImages.preview = true THEN EventImages.url ELSE "No available preview" END`),
+                        Sequelize.literal(`CASE WHEN EventImage.preview = true THEN EventImage.url ELSE "No available preview" END`),
                         'previewImage'
                     ]
                 ]
@@ -138,7 +138,7 @@ event.get('/', goodQuery, async (req, res, next) => {
 
         return {
             ...event.toJSON(),
-            previewImage: event.EventImages[0]?.previewImage,
+            previewImage: event.EventImage[0]?.previewImage,
             numAttending: counts[index],
             startDate: changeDate(event.dataValues.startDate),
             endDate: changeDate(event.dataValues.endDate),
@@ -148,14 +148,14 @@ event.get('/', goodQuery, async (req, res, next) => {
     }));
 
     flatten.map(event => {
-        delete event.EventImages;
+        delete event.EventImage;
     });
 
 
     return res.json({ Events: flatten });
 });
 
-
+///=========================================================
 
 event.get('/:eventId', async (req, res, next) => {
 
