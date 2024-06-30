@@ -94,7 +94,6 @@ event.get('/', goodQuery, async (req, res, next) => {
             },
             {
                 model: EventImage,
-                as: 'EventImages',
                 attributes: [
                     ['url', 'previewImage'],
                     [
