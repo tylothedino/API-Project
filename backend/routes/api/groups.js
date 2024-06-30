@@ -178,7 +178,7 @@ group.post('/', [requireAuth], async (req, res, next) => {
     catch (err) {
         err.message = 'Bad Request';
         err.errors = err.errors
-        err.status = 500;
+        err.status = 400;
 
         return next(err)
 
@@ -278,7 +278,7 @@ group.put('/:groupId', [requireAuth], async (req, res, next) => {
     } catch (err) {
         err.message = 'Bad Request';
         err.errors = err.errors
-        err.status = 500;
+        err.status = 400;
 
         return next(err)
     }
@@ -444,7 +444,7 @@ group.post('/:groupId/venues', [requireAuth], async (req, res, next) => {
     } catch (err) {
         err.message = 'Bad Request';
         err.errors = err.errors
-        err.status = 500;
+        err.status = 400;
 
         return next(err)
     }
@@ -508,7 +508,6 @@ group.get('/:groupId/events', async (req, res, next) => {
         });
         return {
             ...event.toJSON(),
-            previewImage: event.toJSON().EventImages,
             startDate: changeDate(event.toJSON().startDate),
             endDate: changeDate(event.toJSON().endDate),
             previewImage: findPreviewImage ? findPreviewImage.url : "None",
@@ -583,7 +582,7 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
     } catch (err) {
         err.message = 'Bad Request';
         err.errors = err.errors
-        err.status = 500;
+        err.status = 400;
         return next(err)
 
     }
@@ -880,7 +879,7 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
             } catch (err) {
                 err.message = 'Bad Request';
                 err.errors = err.errors
-                err.status = 500;
+                err.status = 400;
 
                 return next(err)
             }
@@ -925,7 +924,7 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
             } catch (err) {
                 err.message = 'Bad Request';
                 err.errors = err.errors
-                err.status = 500;
+                err.status = 400;
 
                 return next(err)
             }

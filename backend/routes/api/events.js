@@ -183,17 +183,6 @@ event.get('/:eventId', async (req, res, next) => {
                 attributes: [],
             },
             {
-                model: EventImage,
-                as: 'EventImages',
-                attributes: [
-                    ['url', 'previewImage'],
-                    [
-                        Sequelize.literal(`CASE WHEN EventImages.preview = true THEN EventImages.url ELSE "No available preview" END`),
-                        'previewImage'
-                    ]
-                ]
-            },
-            {
                 model: Group,
                 attributes: ['id', 'name', 'city', 'state', 'private']
             },
@@ -214,7 +203,6 @@ event.get('/:eventId', async (req, res, next) => {
         });
         return {
             ...event.toJSON(),
-            previewImage: event.toJSON().EventImages[0]?.previewImage,
             startDate: changeDate(event.dataValues.startDate),
             endDate: changeDate(event.dataValues.endDate),
             previewImage: findPreviewImage ? findPreviewImage.url : "None",
@@ -400,7 +388,7 @@ event.put('/:eventId', [requireAuth], async (req, res, next) => {
     } catch (err) {
         err.message = 'Bad Request';
         err.errors = err.errors
-        err.status = 500;
+        err.status = 400;
         return next(err)
 
     }
