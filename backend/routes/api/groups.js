@@ -762,7 +762,7 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             groupId: groupId
         }
     });
-    return res.json("I made it");
+
     //Check their membership
     if (membershipStatus) {
         if (membershipStatus.status === 'pending') {
@@ -785,7 +785,8 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
         } else {
             const newMembership = await Membership.create({
                 userId: user.id,
-                groupId: groupId
+                groupId: groupId,
+                status: 'pending'
             });
 
             // newMembership.toJSON().userId = newMembership.userId;
