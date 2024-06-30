@@ -777,12 +777,14 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
         }
 
     }
+
     else {
         if (findGroup.organizerId === user.id) {
             const err = new Error("User is already a member of the group");
             err.status = 404;
             return next(err);
         } else {
+            return res.json("This is where I found an error")
             const newMembership = await Membership.create({
                 userId: user.id,
                 groupId: groupId,
