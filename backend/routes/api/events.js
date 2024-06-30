@@ -12,16 +12,80 @@ const group = require('./groups');
 
 const event = express.Router();
 
+const goodQuery = [
+    check("page")
+        .optional()
+        .isInt({ min: 1, max: 10 })
+        .withMessage(
+            "Page must be greater than or equal to 1 and less than or equal to 10"
+        ),
+    check("size")
+        .optional()
+        .isInt({ min: 1, max: 20 })
+        .withMessage(
+            "Size must be greater than or equal to 1 and less than or equal to 20"
+        ),
+    check("name").optional().isString().withMessage("Name must be a string"),
+    check("type")
+        .optional()
+        .isIn(["Online", "In person"])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check("startDate")
+        .optional()
+        .custom((value, { req }) => {
+            if (!value.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/)) {
+                throw new Error("Date and time must be in the format: YYYY-MM-DD HH:MM:SS");
+            }
+            return true;
+        })
+        .withMessage("Start date must be a valid datetime"),
+    handleValidationErrors,
+];
 
-event.get('/', async (req, res, next) => {
+const changeDate = (dateString) => {
+
+    const date = new Date(dateString);
+
+    const formattedDate = `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}:${date.getUTCSeconds().toString().padStart(2, '0')}`;
+
+    return formattedDate;
+}
+
+
+event.get('/', goodQuery, async (req, res, next) => {
+
+    let { page = 1, size = 20, name, type, startDate } = req.query;
+    page = parseInt(page);
+    size = parseInt(size);
+
+    const options = { where: {} };
+    options.limit = size;
+    options.offset = size * (page - 1);
+
+    if (name) {
+        options.where.name = { [Sequelize.Op.like]: "%" + name + "%" };
+    }
+    if (type) {
+        options.where.type = type;
+    }
+    if (startDate) {
+        const dateStringUTC = startDate + 'Z';
+        const start = new Date(dateStringUTC);
+        const formattedDate = start.toISOString();
+
+        options.where.startDate = {
+            [Sequelize.Op.gte]: formattedDate,
+        };
+    }
+
     const Events = await Event.findAll({
         attributes: {
             exclude: ['createdAt', 'updatedAt', 'price', 'description', 'capacity'],
-            include: [
-                [
-                    Sequelize.fn("COUNT", Sequelize.col("Attendances.eventId")), "numAttending",
-                ]
-            ]
+            // include: [
+            //     [
+            //         Sequelize.fn("COUNT", Sequelize.col("Attendances.eventId")), "numAttending",
+            //     ]
+            // ]
         },
         include: [
             {
@@ -46,23 +110,47 @@ event.get('/', async (req, res, next) => {
             {
                 model: Venue,
                 attributes: ['id', 'city', 'state']
-            }
+            },
+
         ],
-        group: ['Event.id']
+        ...options,
+        group: ['Event.id'],
     });
 
-    const flatten = Events.map(event => {
+    const countPromises = Events.map(async event => {
+        const currentEventCount = await Attendance.count({
+            where: {
+                eventId: event.id,
+                status: 'attending'
+            }
+        });
+        return currentEventCount;
+    });
+
+    const counts = await Promise.all(countPromises);
+
+    const flatten = await Promise.all(Events.map(async (event, index) => {
+        const findPreviewImage = await EventImage.findOne({
+            where: {
+                eventId: event.id, preview: true
+            },
+            attributes: ['url']
+        });
+
         return {
             ...event.toJSON(),
-            previewImage: event.toJSON().EventImages[0]?.previewImage
+            previewImage: event.EventImages[0]?.previewImage,
+            numAttending: counts[index],
+            startDate: changeDate(event.dataValues.startDate),
+            endDate: changeDate(event.dataValues.endDate),
+            previewImage: findPreviewImage ? findPreviewImage.url : "None",
 
-        }
-    });
+        };
+    }));
 
     flatten.map(event => {
         delete event.EventImages;
     });
-
 
 
     return res.json({ Events: flatten });
@@ -88,7 +176,7 @@ event.get('/:eventId', async (req, res, next) => {
             id: eventId
         },
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'price', 'description', 'capacity'],
+            exclude: ['createdAt', 'updatedAt'],
             include: [
                 [
                     Sequelize.fn("COUNT", Sequelize.col("Attendances.eventId")), "numAttending",
@@ -113,23 +201,32 @@ event.get('/:eventId', async (req, res, next) => {
             },
             {
                 model: Group,
-                attributes: ['id', 'name', 'city', 'state']
+                attributes: ['id', 'name', 'city', 'state', 'private']
             },
             {
                 model: Venue,
-                attributes: ['id', 'city', 'state']
+                attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
             }
         ],
         group: ['Event.id']
     });
 
-    const flatten = Events.map(event => {
+    const flatten = await Promise.all(Events.map(async (event) => {
+        const findPreviewImage = await EventImage.findOne({
+            where: {
+                eventId: event.id, preview: true
+            },
+            attributes: ['url']
+        });
         return {
             ...event.toJSON(),
-            previewImage: event.toJSON().EventImages[0]?.previewImage
+            previewImage: event.toJSON().EventImages[0]?.previewImage,
+            startDate: changeDate(event.dataValues.startDate),
+            endDate: changeDate(event.dataValues.endDate),
+            previewImage: findPreviewImage ? findPreviewImage.url : "None",
 
         }
-    });
+    }));
 
     flatten.map(event => {
         delete event.EventImages;
@@ -137,7 +234,7 @@ event.get('/:eventId', async (req, res, next) => {
 
 
 
-    return res.json({ Events: flatten });
+    return res.json(flatten);
 });
 
 
@@ -187,11 +284,19 @@ event.post('/:eventId/images', [requireAuth], async (req, res, next) => {
 
 
 
-    //Check if the User has the correct permissions
-    if (attendanceStatus !== 'attending' && userGroupMember.status !== 'co-host' && eventGroup.organizerId !== user.id) {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
+    if (userGroupMember) {
+        if (userGroupMember.status !== 'co-host') {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+    } else {
+        if (eventGroup.organizerId !== user.id) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+
     }
 
 
@@ -258,13 +363,20 @@ event.put('/:eventId', [requireAuth], async (req, res, next) => {
     });
 
 
-    //Check if the User has the correct permissions
-    if (userGroupMember.status !== 'co-host' && eventGroup.organizerId !== user.id) {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
-    }
+    if (userGroupMember) {
+        if (userGroupMember.status !== 'co-host') {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+    } else {
+        if (eventGroup.organizerId !== user.id) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
 
+    }
 
     //If the User has the perms edit the event, update event
 
@@ -273,6 +385,10 @@ event.put('/:eventId', [requireAuth], async (req, res, next) => {
     })
 
     delete findEvent.dataValues.updatedAt;
+    findEvent.dataValues.startDate = changeDate(findEvent.dataValues.startDate);
+    findEvent.dataValues.endDate = changeDate(findEvent.dataValues.endDate);
+
+
 
     return res.json(findEvent);
 });
@@ -311,20 +427,20 @@ event.delete('/:eventId', [requireAuth], async (req, res, next) => {
         }
     });
 
-    if (!userGroupMember) {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
+    if (userGroupMember) {
+        if (userGroupMember.status !== 'co-host') {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+    } else {
+        if (eventGroup.organizerId !== user.id) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+
     }
-
-
-    //Check if the User has the correct permissions
-    if (userGroupMember.status !== 'co-host' && eventGroup.organizerId !== user.id) {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
-    }
-
 
     await findEvent.destroy();
 
@@ -611,7 +727,7 @@ event.put('/:eventId/attendance', [requireAuth], async (req, res, next) => {
     //If the status is pending
     if (status === 'pending') {
         const err = new Error("Bad request");
-        err.errors = { status: 'Cannot change a membership status to pending' }
+        err.errors = { status: 'Cannot change an attendance status to pending' }
         err.status = 400;
         return next(err);
     }

@@ -19,7 +19,7 @@ eventImage.delete('/:imageId', [requireAuth], async (req, res, next) => {
     const image = await EventImage.findByPk(imageId);
 
     if (!image) {
-        const err = new Error("Event image couldn't be found");
+        const err = new Error("Event Image couldn't be found");
         err.status = 404;
         return next(err);
 
@@ -40,10 +40,18 @@ eventImage.delete('/:imageId', [requireAuth], async (req, res, next) => {
     });
 
     //Find if User has the proper authorization
-    if (eventGroup.organizerId !== user.id && userMembership.status !== 'co-host') {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
+    if (userMembership) {
+        if (userMembership.status !== 'co-host') {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+    } else {
+        if (eventGroup.organizerId !== user.id) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
 
     }
 

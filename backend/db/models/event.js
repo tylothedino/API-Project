@@ -115,9 +115,9 @@ module.exports = (sequelize, DataTypes) => {
             throw new Error("End date is less than start date");
           }
         }
-      }
+      },
 
-    }
+    },
   }, {
     sequelize,
     modelName: 'Event',

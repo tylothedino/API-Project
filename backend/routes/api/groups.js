@@ -14,18 +14,87 @@ const { format } = require('morgan');
 const group = express.Router();
 
 
-//Get all groups
-group.get('/', async (req, res, next) => {
-    const Groups = await Group.findAll({});
-    return res.json({ Groups });
+const changeDate = (dateString) => {
 
+    const date = new Date(dateString);
+
+    const formattedDate = `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCDate().toString().padStart(2, '0')} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}:${date.getUTCSeconds().toString().padStart(2, '0')}`;
+
+    return formattedDate;
+}
+
+//Get all groups
+group.get("/", async (req, res) => {
+    const groups = await Group.findAll({});
+    const group = await Promise.all(groups.map(async (group) => {
+        const findPreviewImage = await GroupImage.findOne({
+            where: {
+                groupId: group.id, preview: true
+            },
+            attributes: ['url']
+        });
+
+        let membershipCount = await Membership.count({ where: { groupId: group.id } });
+
+        const findOrganizer = group.organizerId;
+        const findOrganizerMembership = await Membership.findOne({
+            where: {
+                userId: findOrganizer,
+                groupId: group.id
+            }
+        });
+
+        if (!findOrganizerMembership) {
+            membershipCount++
+        }
+
+
+        return {
+            ...group.toJSON(),
+            previewImage: findPreviewImage ? findPreviewImage.url : null,
+            numMembers: membershipCount,
+            createdAt: changeDate(group.createdAt),
+            updatedAt: changeDate(group.updatedAt)
+        };
+    }));
+
+    return res.json({ Groups: group });
 });
 
 //Get user's group
 group.get("/current", [requireAuth], async (req, res) => {
     const { user } = req;
     const Groups = await user.getGroups();
-    return res.json({ Groups });
+
+    const groups = await Promise.all(Groups.map(async (group) => {
+
+        let membershipCount = await Membership.count({ where: { groupId: group.id } });
+
+        const userMember = await Membership.findOne({ where: { userId: user.id, groupId: group.id } })
+
+        if (group.organizerId === user.id && !userMember) {
+            membershipCount++;
+        }
+
+        const findPreviewImage = await GroupImage.findOne({
+            where: {
+                groupId: group.id, preview: true
+            },
+            attributes: ['url']
+        });
+
+        return {
+            ...group.toJSON(),
+            numMembers: membershipCount,
+            previewImage: findPreviewImage ? findPreviewImage.url : null, // Handle the case where findPreviewImage is null
+            createdAt: changeDate(group.createdAt),
+            updatedAt: changeDate(group.updatedAt)
+        };
+    }));
+
+
+
+    return res.json({ Groups: groups });
 });
 
 //Get group by ID
@@ -33,6 +102,7 @@ group.get('/:groupId', async (req, res, next) => {
 
     //Search for Group by ID
     const group = await Group.findByPk(req.params.groupId);
+
 
     //If a group couldn't be found
     if (!group) {
@@ -60,7 +130,7 @@ group.get('/:groupId', async (req, res, next) => {
             groupId: result.id
         },
         attributes: {
-            exclude: ['createdAt', 'updatedAt']
+            exclude: ['createdAt', 'updatedAt', 'groupId']
         }
     });
 
@@ -82,6 +152,8 @@ group.get('/:groupId', async (req, res, next) => {
         }
     })
 
+    result.createdAt = changeDate(result.createdAt);
+    result.updatedAt = changeDate(result.updatedAt);
     return res.json(result);
 });
 
@@ -112,6 +184,8 @@ group.post('/', [requireAuth], async (req, res, next) => {
 
     }
     res.status(201);
+    newGroup.dataValues.createdAt = changeDate(newGroup.dataValues.createdAt);
+    newGroup.dataValues.updatedAt = changeDate(newGroup.dataValues.updatedAt);
     return res.json(newGroup);
 
 });
@@ -197,9 +271,20 @@ group.put('/:groupId', [requireAuth], async (req, res, next) => {
 
     const { name, about, type, private, city, state } = { ...req.body };
 
-    await findGroup.update({
-        name, about, type, private, city, state
-    })
+    try {
+        await findGroup.update({
+            name, about, type, private, city, state
+        });
+    } catch (err) {
+        err.message = 'Bad Request';
+        err.errors = err.errors
+        err.status = 500;
+
+        return next(err)
+    }
+
+    findGroup.dataValues.createdAt = changeDate(findGroup.dataValues.createdAt);
+    findGroup.dataValues.updatedAt = changeDate(findGroup.dataValues.updatedAt);
 
     return res.json(
         findGroup
@@ -318,6 +403,11 @@ group.post('/:groupId/venues', [requireAuth], async (req, res, next) => {
     });
 
     // console.log(membershipStatus.status);
+    if (!membershipStatus) {
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
+    }
 
     if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
         const err = new Error("Forbidden");
@@ -352,6 +442,9 @@ group.post('/:groupId/venues', [requireAuth], async (req, res, next) => {
 
         return next(err)
     }
+
+    delete createVenue.dataValues.updatedAt;
+    delete createVenue.dataValues.createdAt;
 
     return res.json(createVenue);
 
@@ -389,17 +482,6 @@ group.get('/:groupId/events', async (req, res, next) => {
                 attributes: [],
             },
             {
-                model: EventImage,
-                as: 'EventImages',
-                attributes: [
-                    ['url', 'previewImage'],
-                    [
-                        Sequelize.literal(`CASE WHEN EventImages.preview = true THEN EventImages.url ELSE "No available preview" END`),
-                        'previewImage'
-                    ]
-                ]
-            },
-            {
                 model: Group,
                 attributes: ['id', 'name', 'city', 'state']
             },
@@ -411,13 +493,21 @@ group.get('/:groupId/events', async (req, res, next) => {
         group: ['Event.id']
     });
 
-    const flatten = Events.map(event => {
+    const flatten = await Promise.all(Events.map(async (event) => {
+        const findPreviewImage = await EventImage.findOne({
+            where: {
+                eventId: event.id, preview: true
+            },
+            attributes: ['url']
+        });
         return {
             ...event.toJSON(),
-            previewImage: event.toJSON().EventImages[0]?.previewImage
-
+            previewImage: event.toJSON().EventImages,
+            startDate: changeDate(event.toJSON().startDate),
+            endDate: changeDate(event.toJSON().endDate),
+            previewImage: findPreviewImage ? findPreviewImage.url : "None",
         }
-    });
+    }));
 
     flatten.map(event => {
         delete event.EventImages;
@@ -452,7 +542,7 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
     //If Venue couldn't be found
 
     const findVenue = await Venue.findByPk(venueId);
-    if (!findVenue) {
+    if (!findVenue || type !== 'Online') {
         const err = new Error("Venue couldn't be found");
         err.status = 404;
         return next(err);
@@ -469,6 +559,12 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
     });
 
     // console.log(membershipStatus.status);
+
+    if (!membershipStatus) {
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
+    }
 
     if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
         const err = new Error("Forbidden");
@@ -498,6 +594,9 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
     delete createEvent.dataValues.createdAt;
     delete createEvent.dataValues.updatedAt;
 
+    createEvent.dataValues.startDate = changeDate(createEvent.dataValues.startDate);
+
+    createEvent.dataValues.endDate = changeDate(createEvent.dataValues.endDate);
 
     return res.json(createEvent);
 
@@ -747,7 +846,7 @@ group.put('/:groupId/membership', [requireAuth], async (req, res, next) => {
 
     //If they have credentials
 
-    if (status === 'co-host' && findGroup.organizerId === user.id) {
+    if (status === 'co-host' || findGroup.organizerId === user.id) {
         if (findGroup.organizerId !== user.id) {
             const err = new Error("Forbidden");
             err.status = 403;

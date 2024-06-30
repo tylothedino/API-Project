@@ -29,11 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'pending',
       allowNull: false,
       validate: {
-        ifPending(val) {
-          if (val.toLowerCase() === 'pending' || !this.status) {
-            throw new Error('Cannot change a membership status to pending')
-          }
-        },
         ifNotParams(val) {
           if (val.toLowerCase() !== 'co-host' && val.toLowerCase() !== 'member' && val.toLowerCase() !== 'pending') {
             throw new Error('Status must be co-host or member');

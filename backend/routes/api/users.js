@@ -41,6 +41,14 @@ router.post(
     '/',
     validateSignup,
     async (req, res, next) => {
+        const currUser = req.user;
+
+        if (currUser) {
+            const err = new Error("User is already logged in, please sign out");
+            err.status = 403;
+            return next(err);
+        }
+
         const { email, password, username, firstName, lastName } = req.body;
         const hashedPassword = bcrypt.hashSync(password);
 

@@ -46,11 +46,19 @@ venue.put('/:venueId', [requireAuth], async (req, res, next) => {
     });
 
     //============================================
+    if (membershipStatus) {
+        if (membershipStatus.status !== 'co-host') {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+    } else {
+        if (findGroup.organizerId !== user.id) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
 
-    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
     }
 
     //============================================
@@ -69,6 +77,7 @@ venue.put('/:venueId', [requireAuth], async (req, res, next) => {
         return next(err)
     }
 
+    delete findVenue.dataValues.updatedAt;
 
     return res.json(findVenue);
 

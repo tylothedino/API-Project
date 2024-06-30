@@ -19,7 +19,7 @@ groupImage.delete('/:imageId', [requireAuth], async (req, res, next) => {
     const image = await GroupImage.findByPk(imageId);
 
     if (!image) {
-        const err = new Error("Group image couldn't be found");
+        const err = new Error("Group Image couldn't be found");
         err.status = 404;
         return next(err);
 
@@ -37,10 +37,18 @@ groupImage.delete('/:imageId', [requireAuth], async (req, res, next) => {
     });
 
     //Find if User has the proper authorization
-    if (imageGroup.organizerId !== user.id && userMembership.status !== 'co-host') {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
+    if (userMembership) {
+        if (userMembership.status !== 'co-host') {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+    } else {
+        if (imageGroup.organizerId !== user.id) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
 
     }
 

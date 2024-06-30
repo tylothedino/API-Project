@@ -30,7 +30,7 @@ module.exports = {
         {
           userId: 3,
           groupId: 1,
-          status: 'pending'
+          status: 'member'
         },
       ],
       { validate: true }
