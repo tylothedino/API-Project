@@ -754,8 +754,6 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
         return next(err);
     }
 
-    //====================================
-
     const membershipStatus = await Membership.findOne({
         where: {
             userId: user.id,
@@ -775,7 +773,6 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             err.status = 404;
             return next(err);
         }
-
     }
 
     else {
@@ -792,9 +789,6 @@ group.post('/:groupId/membership', [requireAuth], async (req, res, next) => {
             });
 
             // newMembership.toJSON().userId = newMembership.userId;
-
-
-
             return res.json({ memberId: newMembership.userId });
         }
     }
