@@ -490,10 +490,9 @@ group.get('/:groupId/events', async (req, res, next) => {
                 model: Venue,
                 attributes: ['id', 'city', 'state']
             }
-        ],
-        group: ['Event.id']
+        ]
     });
-    return res.body(Events);
+
     const flatten = await Promise.all(Events.map(async (event) => {
         const findPreviewImage = await EventImage.findOne({
             where: {
