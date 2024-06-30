@@ -96,10 +96,6 @@ event.get('/', goodQuery, async (req, res, next) => {
                 model: EventImage,
                 attributes: [
                     ['url', 'previewImage'],
-                    [
-                        Sequelize.literal(`CASE WHEN EventImages.preview = true THEN EventImages.url ELSE "No available preview" END`),
-                        'previewImage'
-                    ]
                 ]
             },
             {
@@ -138,7 +134,6 @@ event.get('/', goodQuery, async (req, res, next) => {
 
         return {
             ...event.toJSON(),
-            previewImage: event.dataValues.EventImages[0]?.previewImage,
             numAttending: counts[index],
             startDate: changeDate(event.dataValues.startDate),
             endDate: changeDate(event.dataValues.endDate),
