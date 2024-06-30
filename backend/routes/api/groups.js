@@ -490,7 +490,8 @@ group.get('/:groupId/events', async (req, res, next) => {
                 model: Venue,
                 attributes: ['id', 'city', 'state']
             }
-        ]
+        ],
+        // group: ['Event.id']
     });
 
     const flatten = await Promise.all(Events.map(async (event) => {
@@ -501,10 +502,18 @@ group.get('/:groupId/events', async (req, res, next) => {
             attributes: ['url']
         });
 
+        const numAttending = await Attendance.count({
+            where: {
+                eventId: event.id,
+                status: ['attending']
+            }
+        })
+
         //Find numattending
 
         return {
             ...event.toJSON(),
+            numAttending: numAttending,
             startDate: changeDate(event.toJSON().startDate),
             endDate: changeDate(event.toJSON().endDate),
             previewImage: findPreviewImage ? findPreviewImage.url : "None",

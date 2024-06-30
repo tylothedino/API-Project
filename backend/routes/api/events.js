@@ -171,11 +171,7 @@ event.get('/:eventId', async (req, res, next) => {
         },
         attributes: {
             exclude: ['createdAt', 'updatedAt'],
-            include: [
-                [
-                    Sequelize.fn("COUNT", Sequelize.col("Attendances.eventId")), "numAttending",
-                ]
-            ]
+
         },
         include: [
             {
@@ -191,7 +187,7 @@ event.get('/:eventId', async (req, res, next) => {
                 attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
             }
         ],
-        group: ['Event.id']
+        // group: ['Event.id']
     });
 
     const flatten = await Promise.all(Events.map(async (event) => {
@@ -201,8 +197,17 @@ event.get('/:eventId', async (req, res, next) => {
             },
             attributes: ['url']
         });
+
+        const numAttending = await Attendance.count({
+            where: {
+                eventId: event.id,
+                status: ['attending']
+            }
+        })
+
         return {
             ...event.toJSON(),
+            numAttending: numAttending,
             startDate: changeDate(event.dataValues.startDate),
             endDate: changeDate(event.dataValues.endDate),
             previewImage: findPreviewImage ? findPreviewImage.url : "None",
