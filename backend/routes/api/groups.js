@@ -51,7 +51,7 @@ group.get("/", async (req, res) => {
 
         return {
             ...group.toJSON(),
-            previewImage: findPreviewImage ? findPreviewImage.url : null,
+            previewImage: findPreviewImage ? findPreviewImage.url : "No preview images available",
             numMembers: membershipCount,
             createdAt: changeDate(group.createdAt),
             updatedAt: changeDate(group.updatedAt)
@@ -86,7 +86,7 @@ group.get("/current", [requireAuth], async (req, res) => {
         return {
             ...group.toJSON(),
             numMembers: membershipCount,
-            previewImage: findPreviewImage ? findPreviewImage.url : null, // Handle the case where findPreviewImage is null
+            previewImage: findPreviewImage ? findPreviewImage.url : "No preview images available", // Handle the case where findPreviewImage is null
             createdAt: changeDate(group.createdAt),
             updatedAt: changeDate(group.updatedAt)
         };
