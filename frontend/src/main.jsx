@@ -7,11 +7,18 @@ import './index.css';
 import { Provider } from 'react-redux';
 import configureStore from './store';
 
+//Receive CSRF token
+import { restoreCSRF, csrfFetch } from './store/csrf';
+
+
 //Create a variable to access your store and expose it on the <WINDOW>
 const store = configureStore();
 
 //It should not be exposed in production; make sure this is only set in development
-if (process.env.NODE_ENV !== 'production') {
+if (import.meta.env.MODE !== 'production') {
+  restoreCSRF();
+
+  window.csrfFetch = csrfFetch;
   window.store = store;
 }
 
