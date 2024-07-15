@@ -11,13 +11,14 @@
 //Import the CSRF fetch method
 import { csrfFetch } from "./csrf";
 
+
 const SET_USER = 'user/setUser';
 const REMOVE_USER = 'user/removeUser'
 
 //========================================REGULAR ACTION CREATOR==========================================
 
 //Set the current user
-const setUser = (user) => ({
+export const setUser = (user) => ({
     type: SET_USER,
     user
 
@@ -28,6 +29,7 @@ export const removeUser = () => ({
     type: REMOVE_USER
 
 });
+
 
 //=========================================THUNK ACTION CREATOR===========================================
 
@@ -48,8 +50,19 @@ export const loginUser = (user) => async (dispatch) => {
         return response;
 
     }
-}
+};
 
+//Restore to the current user -> GET the user
+export const restoreUser = () => async (dispatch) => {
+    const response = await csrfFetch('/api/session');
+
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(setUser(data.user));
+        return response;
+    }
+
+};
 
 
 //========================================================================================================
