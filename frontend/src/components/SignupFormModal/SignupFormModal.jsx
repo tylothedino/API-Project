@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { useModal } from '../../context/Modal';
 
 //Grab the signup thunk action creator
 import { signup } from "../../store/session";
 
-const SignupFormPage = () => {
+const SignupFormModal = () => {
 
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -16,30 +17,33 @@ const SignupFormPage = () => {
 
     const [validationErrors, setValidationErrors] = useState({});
 
+    const { closeModal } = useModal();
+
     const dispatch = useDispatch();
 
-    const user = useSelector(state => state.session.user);
+    // const user = useSelector(state => state.session.user);
 
-    if (user) return <Navigate to='/' replace={true} />
+    // if (user) return <Navigate to='/' replace={true} />
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         if (password === confirmPassword) {
             return dispatch(
-                sessionActions.signup({
+                signup({
                     email,
                     username,
                     firstName,
                     lastName,
                     password
                 })
-            ).catch(async (res) => {
-                const data = await res.json();
-                if (data?.errors) {
-                    setValidationErrors(data.errors);
-                }
-            });
+            ).then(closeModal)
+                .catch(async (res) => {
+                    const data = await res.json();
+                    setValidationErrors(data);
+                    console.log(data);
+
+                });
         }
         return setValidationErrors({
             confirmPassword: "Confirm Password field must be the same as the Password field"
@@ -66,7 +70,7 @@ const SignupFormPage = () => {
                         required
                     />
                 </label>
-                {validationErrors.email && <p className="errors">{validationErrors.email}</p>}
+                {validationErrors.errors && <p className="errors">{validationErrors.errors.email}</p>}
                 <label>
                     Username
                     <input
@@ -76,7 +80,7 @@ const SignupFormPage = () => {
                         required
                     />
                 </label>
-                {validationErrors.username && <p className="errors">{validationErrors.username}</p>}
+                {validationErrors.errors && <p className="errors">{validationErrors.errors.username}</p>}
                 <label>
                     First Name
                     <input
@@ -86,7 +90,7 @@ const SignupFormPage = () => {
                         required
                     />
                 </label>
-                {validationErrors.firstName && <p className="errors">{validationErrors.firstName}</p>}
+                {validationErrors.errors && <p className="errors">{validationErrors.errors.firstName}</p>}
                 <label>
                     Last Name
                     <input
@@ -96,7 +100,7 @@ const SignupFormPage = () => {
                         required
                     />
                 </label>
-                {validationErrors.lastName && <p className="errors">{validationErrors.lastName}</p>}
+                {validationErrors.errors && <p className="errors">{validationErrors.errors.lastName}</p>}
                 <label>
                     Password
                     <input
@@ -106,7 +110,7 @@ const SignupFormPage = () => {
                         required
                     />
                 </label>
-                {validationErrors.password && <p className="errors">{validationErrors.password}</p>}
+                {validationErrors.errors && <p className="errors">{validationErrors.errors.password}</p>}
                 <label>
                     Confirm Password
                     <input
@@ -126,4 +130,4 @@ const SignupFormPage = () => {
 
 };
 
-export default SignupFormPage;
+export default SignupFormModal;
