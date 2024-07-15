@@ -5,7 +5,10 @@ import { Navigate } from "react-router-dom";
 //Grab the loginUser thunk action creator from session.js
 import { loginUser } from "../../store/session";
 
-const LoginFormPage = () => {
+import { useModal } from '../../context/Modal';
+import './LoginForm.css';
+
+const LoginFormModal = () => {
     //States for the user's login
     const [credential, setCredential] = useState('');
     const [password, setPassword] = useState('');
@@ -13,13 +16,15 @@ const LoginFormPage = () => {
     //States for the validation errors
     const [validationErrors, setValidationErrors] = useState({});
 
+    const { closeModal } = useModal();
+
     //Create a dispatch variable
     const dispatch = useDispatch();
     //Extract data from the Redux store state - session
-    const user = useSelector(state => state.session.user);
+    // const user = useSelector(state => state.session.user);
 
     //If a user is logged in -> navigate to the home page
-    if (user) return <Navigate to="/" replace={true} />;
+    // if (user) return <Navigate to="/" replace={true} />;
 
     //On form submit
     const handleSubmit = (e) => {
@@ -36,13 +41,22 @@ const LoginFormPage = () => {
         reset();
 
         //Dispatch the loginUser method and if an error is given set it to the validationErrors
-        return dispatch(loginUser(user)).catch(
-            async (res) => {
+        // return dispatch(loginUser(user)).catch(
+        //     async (res) => {
+        //         const data = await res.json();
+        //         setValidationErrors(data);
+
+        //     }
+        // );
+
+
+        return dispatch(loginUser(user))
+            .then(closeModal)
+            .catch(async (res) => {
                 const data = await res.json();
                 setValidationErrors(data);
 
-            }
-        );
+            });
 
     };
 
@@ -67,6 +81,7 @@ const LoginFormPage = () => {
                         value={credential}
                         placeholder="Username/Email"
                         name='credential'
+                    // required
                     />
                 </div>
                 {/* Password */}
@@ -78,6 +93,7 @@ const LoginFormPage = () => {
                         value={password}
                         placeholder="Password"
                         name='password'
+                    // required
                     />
 
                 </div>
@@ -98,4 +114,4 @@ const LoginFormPage = () => {
 
 };
 
-export default LoginFormPage;
+export default LoginFormModal;

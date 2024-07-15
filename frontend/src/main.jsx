@@ -13,6 +13,8 @@ import { restoreCSRF, csrfFetch } from './store/csrf';
 //Session login
 import * as sessionActions from './store/session';
 
+import { ModalProvider, Modal } from './context/Modal';
+
 
 //Create a variable to access your store and expose it on the <WINDOW>
 const store = configureStore();
@@ -35,8 +37,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {/*
       Wrapping the rendered <App> component in Redux's Provider component passing store as a prop of the same name to Provider
     */}
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ModalProvider>
+      <Provider store={store}>
+        <App />
+        <Modal />
+      </Provider>
+    </ModalProvider>
   </React.StrictMode>
 );
