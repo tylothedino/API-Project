@@ -10,6 +10,9 @@ import configureStore from './store';
 //Receive CSRF token
 import { restoreCSRF, csrfFetch } from './store/csrf';
 
+//Session login
+import * as sessionActions from './store/session';
+
 
 //Create a variable to access your store and expose it on the <WINDOW>
 const store = configureStore();
@@ -20,7 +23,11 @@ if (import.meta.env.MODE !== 'production') {
 
   window.csrfFetch = csrfFetch;
   window.store = store;
+
+  //Login
+  window.sessionActions = sessionActions;
 }
+
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
