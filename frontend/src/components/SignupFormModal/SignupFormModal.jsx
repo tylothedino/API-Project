@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+// import { Navigate } from "react-router-dom";
 import { useModal } from '../../context/Modal';
 
 //Grab the signup thunk action creator
@@ -28,6 +28,7 @@ const SignupFormModal = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        reset();
         if (password === confirmPassword) {
             return dispatch(
                 signup({
@@ -45,6 +46,7 @@ const SignupFormModal = () => {
 
                 });
         }
+
         return setValidationErrors({
             confirmPassword: "Confirm Password field must be the same as the Password field"
         });

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+// import { Navigate } from "react-router-dom";
 
 //Grab the loginUser thunk action creator from session.js
 import { loginUser } from "../../store/session";
