@@ -36,6 +36,9 @@ group.get("/", async (req, res) => {
 
         let membershipCount = await Membership.count({ where: { groupId: group.id } });
 
+        //FRONTEND CHANGE
+        const eventCount = await Event.count({ where: { groupId: group.id } });
+
         const findOrganizer = group.organizerId;
         const findOrganizerMembership = await Membership.findOne({
             where: {
@@ -54,7 +57,9 @@ group.get("/", async (req, res) => {
             previewImage: findPreviewImage ? findPreviewImage.url : "No preview images available",
             numMembers: membershipCount,
             createdAt: changeDate(group.createdAt),
-            updatedAt: changeDate(group.updatedAt)
+            updatedAt: changeDate(group.updatedAt),
+            //FRONTEND CHANGE
+            eventCount: eventCount
         };
     }));
 

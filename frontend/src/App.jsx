@@ -2,9 +2,12 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+//Components
 // import LoginFormPage from './components/LoginFormPage';
 // import SignupFormPage from './components/SignupFormModal';
 import Navigation from './components/Navigation/Navigation';
+import GroupEventNavigation from './components/Navigation/GroupEventNavigation';
+import Groups from './components/Groups/Groups';
 
 import { restoreUser } from './store/session';
 
@@ -39,6 +42,12 @@ const router = createBrowserRouter([
       //   path: 'login',
       //   element: <LoginFormPage />
       // },
+
+      // {
+      //   path: 'signup',
+      //   element: <SignupFormPage />
+      // }
+
       {
         path: '/',
         element: <h1>Welcome</h1>
@@ -47,10 +56,24 @@ const router = createBrowserRouter([
         path: '*',
         element: <h1>Page not found</h1>
       },
-      // {
-      //   path: 'signup',
-      //   element: <SignupFormPage />
-      // }
+      {
+        path: 'groups',
+        element:
+          <>
+            <GroupEventNavigation />
+            <Groups />
+          </>
+
+      },
+      {
+        path: 'events',
+        element:
+          <>
+            <GroupEventNavigation />
+
+          </>
+      }
+
     ]
   }
 
