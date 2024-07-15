@@ -1,7 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { FcButtingIn } from "react-icons/fc";
+import ProfileButton from './ProfileButton';
 import * as sessionActions from '../../store/session';
+
+import './Navigation.css';
 
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector(state => state.session.user);
@@ -15,11 +17,11 @@ function Navigation({ isLoaded }) {
     const sessionLinks = sessionUser ? (
         <>
             <li>
-                <FcButtingIn user={sessionUser} />
+                <ProfileButton user={sessionUser} />
             </li>
-            <li>
+            {/* <li>
                 <button onClick={logout}>Log Out</button>
-            </li>
+            </li> */}
         </>
     ) : (
         <>
