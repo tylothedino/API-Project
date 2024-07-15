@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import LoginFormPage from './components/LoginFormPage';
+import SignupFormPage from './components/SignupFormPage';
+
 import { restoreUser } from './store/session';
 
 
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: '*',
         element: <h1>Page not found</h1>
+      },
+      {
+        path: 'signup',
+        element: <SignupFormPage />
       }
     ]
   }

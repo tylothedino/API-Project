@@ -13,7 +13,8 @@ import { csrfFetch } from "./csrf";
 
 
 const SET_USER = 'user/setUser';
-const REMOVE_USER = 'user/removeUser'
+const LOGOUT_USER = 'user/logoutUser';
+const CREATE_USER = 'user/createUser';
 
 //========================================REGULAR ACTION CREATOR==========================================
 
@@ -24,8 +25,8 @@ export const setUser = (user) => ({
 
 });
 
-//Remove the current user
-export const removeUser = () => ({
+//Logout the current user
+export const logoutUser = () => ({
     type: REMOVE_USER
 
 });
@@ -33,6 +34,7 @@ export const removeUser = () => ({
 
 //=========================================THUNK ACTION CREATOR===========================================
 
+//Login a user
 export const loginUser = (user) => async (dispatch) => {
     const { credential, password } = user;
     const response = await csrfFetch('/api/session', {
@@ -64,6 +66,24 @@ export const restoreUser = () => async (dispatch) => {
 
 };
 
+//Add a new User
+export const signup = (user) => async (dispatch) => {
+    const { username, firstName, lastName, email, password } = user;
+    const response = await csrfFetch("/api/users", {
+        method: "POST",
+        body: JSON.stringify({
+            username,
+            firstName,
+            lastName,
+            email,
+            password
+        })
+    });
+    const data = await response.json();
+    dispatch(setUser(data.user));
+    return response;
+};
+
 
 //========================================================================================================
 
@@ -80,7 +100,8 @@ const session = (state = initialUser, action) => {
             const newUser = { ...state, user: action.user };
             return newUser;
         }
-        case REMOVE_USER: {
+        //Logout user
+        case LOGOUT_USER: {
             const newUser = { ...state, user: null };
             return newUser;
         }
