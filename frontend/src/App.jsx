@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import LoginFormPage from './components/LoginFormPage';
 import SignupFormPage from './components/SignupFormPage';
+import Navigation from './components/Navigation/Navigation';
 
 import { restoreUser } from './store/session';
 
@@ -23,6 +24,7 @@ function Layout() {
 
   return (
     <>
+      <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>
   );

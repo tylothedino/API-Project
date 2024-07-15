@@ -14,7 +14,7 @@ import { csrfFetch } from "./csrf";
 
 const SET_USER = 'user/setUser';
 const LOGOUT_USER = 'user/logoutUser';
-const CREATE_USER = 'user/createUser';
+// const CREATE_USER = 'user/createUser';
 
 //========================================REGULAR ACTION CREATOR==========================================
 
@@ -27,7 +27,7 @@ export const setUser = (user) => ({
 
 //Logout the current user
 export const logoutUser = () => ({
-    type: REMOVE_USER
+    type: LOGOUT_USER
 
 });
 
@@ -81,6 +81,15 @@ export const signup = (user) => async (dispatch) => {
     });
     const data = await response.json();
     dispatch(setUser(data.user));
+    return response;
+};
+
+//Logout a User
+export const logout = () => async (dispatch) => {
+    const response = await csrfFetch('/api/session', {
+        method: 'DELETE'
+    });
+    dispatch(logoutUser());
     return response;
 };
 
