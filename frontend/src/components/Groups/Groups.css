@@ -35,6 +35,7 @@
 
 .groupDesc {
     color: gray;
+    font-size: medium;
 }
 
 .singleGroupContent {
@@ -59,5 +60,23 @@
 .container {
     display: flex;
     justify-content: center;
+    margin-bottom: 2em;
 
+}
+
+.detailsContainer {
+    background-color: rgba(238, 237, 237, 0.998);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    max-width: 65%;
+}
+
+.groupInfo {
+    font-size: medium;
 }
