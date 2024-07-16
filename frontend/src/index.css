@@ -4,3 +4,9 @@
     color: red;
     font-size: small;
 }
+
+.articleLists {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

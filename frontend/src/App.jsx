@@ -59,19 +59,19 @@ const router = createBrowserRouter([
       {
         path: 'groups',
         element:
-          <>
+          <div className='articleLists'>
             <GroupEventNavigation />
             <Groups />
-          </>
+          </div>
 
       },
       {
         path: 'events',
         element:
-          <>
+          <div className='articleLists'>
             <GroupEventNavigation />
 
-          </>
+          </div>
       }
 
     ]

@@ -9,20 +9,26 @@ function GroupEventNavigation() {
 
 
     return (
-        <nav>
-            <NavLink to={'/events'}>
-                Events
-            </NavLink>
+        <div className="eventGroupNav">
+            <nav>
+                <div className="eventGroupHeading">
+                    <NavLink to={'/events'}>
+                        Events
+                    </NavLink>
 
-            <NavLink to={'/groups'}>Groups</NavLink>
+                    <NavLink to={'/groups'}>Groups</NavLink>
+                </div>
 
-            {
-                location.pathname === '/groups' ? <h4>Groups in Meetup</h4> : <></>
-            }
-            {
-                location.pathname === '/events' ? <h4>Events in Meetup</h4> : <></>
-            }
-        </nav >
+
+                {
+                    location.pathname === '/groups' ? <h4 className="eventMeetupTitle">Groups in Meetup</h4> : <></>
+                }
+                {
+                    location.pathname === '/events' ? <h4 className="eventMeetupTitle">Events in Meetup</h4> : <></>
+                }
+            </nav >
+        </div >
+
     );
 }
 
