@@ -49,10 +49,10 @@ function Groups() {
                             }
                         </div>
                         <div className='meetupBody'>
-                            <p>
+                            <div>
                                 <h3 className='groupListName' onClick={toGroup(group.id)}>{group.name}</h3>
                                 <h4 className='groupListLocation' onClick={toGroup(group.id)}>{group.city + ", " + group.state}</h4>
-                            </p>
+                            </div>
                             <p className='groupListDesc' onClick={toGroup(group.id)}>{group.about}</p>
                             <p onClick={toGroup(group.id)}>{group.eventCount} event(s) ·
                                 {group.private ? " Private" : " Public"}
