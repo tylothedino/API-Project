@@ -23,7 +23,7 @@ function Groups() {
         groupList = Object.values(groups);
     }
 
-    console.log(groupList)
+    // console.log(groupList)
     //Redirect to group page - groupId is the id req.param
     function toGroup(groupId) {
         return () => {

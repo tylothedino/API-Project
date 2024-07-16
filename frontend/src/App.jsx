@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import Navigation from './components/Navigation/Navigation';
 import GroupEventNavigation from './components/Navigation/GroupEventNavigation';
 import Groups from './components/Groups/Groups';
+import SingleGroup from './components/Groups/SingleGroup';
 
 import { restoreUser } from './store/session';
 
@@ -62,8 +63,7 @@ const router = createBrowserRouter([
           <div className='articleLists'>
             <GroupEventNavigation />
             <Groups />
-          </div>
-
+          </div>,
       },
       {
         path: 'events',
@@ -72,6 +72,11 @@ const router = createBrowserRouter([
             <GroupEventNavigation />
 
           </div>
+      },
+      {
+        path: 'groups/:groupId',
+        element:
+          <SingleGroup />
       }
 
     ]

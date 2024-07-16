@@ -108,6 +108,8 @@ group.get('/:groupId', async (req, res, next) => {
     //Search for Group by ID
     const group = await Group.findByPk(req.params.groupId);
 
+    //FRONTEND CHANGE
+    const eventCount = await Event.count({ where: { groupId: group.id } });
 
     //If a group couldn't be found
     if (!group) {
@@ -140,7 +142,7 @@ group.get('/:groupId', async (req, res, next) => {
     });
 
     //Get the organizer and set to the obj
-    result.Organizer = await User.findAll({
+    result.Organizer = await User.findOne({
         where: {
             id: result.organizerId
         },
@@ -159,6 +161,8 @@ group.get('/:groupId', async (req, res, next) => {
 
     result.createdAt = changeDate(result.createdAt);
     result.updatedAt = changeDate(result.updatedAt);
+    //FRONTEND CHANGE
+    result.eventCount = eventCount
     return res.json(result);
 });
 
