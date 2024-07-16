@@ -9,6 +9,7 @@ import Navigation from './components/Navigation/Navigation';
 import GroupEventNavigation from './components/Navigation/GroupEventNavigation';
 import Groups from './components/Groups/Groups';
 import SingleGroup from './components/Groups/SingleGroup';
+import Events from './components/Events/Event';
 
 import { restoreUser } from './store/session';
 
@@ -70,13 +71,18 @@ const router = createBrowserRouter([
         element:
           <div className='articleLists'>
             <GroupEventNavigation />
-
+            <Events />
           </div>
       },
       {
         path: 'groups/:groupId',
         element:
           <SingleGroup />
+      },
+      {
+        path: 'events/:eventId',
+        element:
+          <h1>HELLO</h1>
       }
 
     ]

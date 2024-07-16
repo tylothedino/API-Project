@@ -1,0 +1,85 @@
+.eventList {
+    min-width: 46%;
+    border-bottom: solid lightgray;
+    padding-bottom: 1.25rem;
+    margin-top: 1.25rem;
+    display: flex;
+
+
+    /* align-content: center; */
+}
+
+.meetupBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-width: auto;
+    margin-left: 1em;
+
+}
+
+.centerContainer {
+    min-width: 780px;
+    max-width: 33%;
+}
+
+
+.singleGroupContent {
+    display: flex;
+    justify-content: space-evenly;
+    min-width: 100%;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    min-width: 500px;
+
+
+}
+
+.header p {
+    align-self: start;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2em;
+
+}
+
+.detailsContainer {
+    background-color: rgba(238, 237, 237, 0.998);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    max-width: 65%;
+}
+
+.groupInfo {
+    font-size: medium;
+}
+
+.eventListSchedule {
+    align-self: start;
+    margin: 1px;
+    color: teal;
+}
+
+.eventListName {
+    align-self: start;
+    margin: 2px
+}
+
+.eventListLocation {
+    align-self: start;
+    margin: 2px;
+    color: silver;
+}

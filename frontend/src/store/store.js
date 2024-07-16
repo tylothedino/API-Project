@@ -2,10 +2,12 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { thunk } from 'redux-thunk';
 import session from './session';
 import group from './features/group';
+import event from './features/event';
 //Contains all reducer functions from different "stores"
 const rootReducer = combineReducers({
     session,
-    group
+    group,
+    event
 });
 
 /*
