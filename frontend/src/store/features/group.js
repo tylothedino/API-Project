@@ -4,6 +4,7 @@ import { csrfFetch } from '../csrf'
 //ACTION TYPES
 const GET_ALL_GROUPS = 'groups/getAllGroups';
 const GET_GROUP = 'groups/getGroup';
+const GET_GROUP_EVENTS = 'groups/getGroupEvents';
 
 //========================================REGULAR ACTION CREATOR==========================================
 
@@ -18,8 +19,13 @@ export const getAllGroups = (groups) => ({
 export const getGroup = (group) => ({
     type: GET_GROUP,
     group
+
 });
 
+export const getGroupEvents = (events) => ({
+    type: GET_GROUP_EVENTS,
+    events
+});
 
 //========================================THUNK ACTION CREATOR============================================
 
@@ -45,6 +51,17 @@ export const oneGroup = (groupId) => async (dispatch) => {
 
     return response;
 
+
+};
+
+export const groupEvents = (groupId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/groups/${groupId}/events`);
+
+    const data = await response.json();
+
+    dispatch(getGroupEvents(data));
+
+    return response;
 
 };
 
@@ -75,6 +92,11 @@ const group = (state = [], action) => {
             groupState[action.group.id] = action.group;
             return groupState;
 
+        }
+
+        case GET_GROUP_EVENTS: {
+            const groupState = { ...state, events: [...action.events.Events] };
+            return groupState;
         }
 
     }

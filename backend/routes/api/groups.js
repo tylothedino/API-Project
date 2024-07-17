@@ -484,7 +484,7 @@ group.get('/:groupId/events', async (req, res, next) => {
             groupId
         },
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'price', 'description', 'capacity']
+            exclude: ['createdAt', 'updatedAt', 'price', 'capacity']
         },
         include: [
             {

@@ -1,5 +1,4 @@
 .groupList {
-    min-width: 46%;
     border-bottom: solid lightgray;
     padding-bottom: 1.25rem;
     margin-top: 1.25rem;
@@ -15,10 +14,7 @@
 
 }
 
-.centerContainer {
-    min-width: 780px;
-    max-width: 33%;
-}
+.centerContainer {}
 
 .groupListName {
     margin-bottom: 0px;
@@ -41,14 +37,12 @@
 .singleGroupContent {
     display: flex;
     justify-content: space-evenly;
-    min-width: 100%;
 }
 
 .header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 65%;
     margin-top: 5rem;
 
 }
@@ -66,17 +60,26 @@
 
 .detailsContainer {
     background-color: rgba(238, 237, 237, 0.998);
-    width: 100%;
     display: flex;
-    justify-content: center;
+
+    flex-direction: column;
 }
 
 .details {
     display: flex;
     flex-direction: column;
-    max-width: 65%;
+    align-content: center;
 }
 
 .groupInfo {
     font-size: medium;
+}
+
+.eventList {
+    padding: 20px;
+}
+
+.groupEventList .eventList {
+    background-color: white;
+    border-radius: 25px;
 }
