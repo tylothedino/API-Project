@@ -198,6 +198,7 @@ event.get('/:eventId', async (req, res, next) => {
             attributes: ['url']
         });
 
+
         const numAttending = await Attendance.count({
             where: {
                 eventId: event.id,
@@ -212,6 +213,7 @@ event.get('/:eventId', async (req, res, next) => {
             endDate: changeDate(event.dataValues.endDate),
             previewImage: findPreviewImage ? findPreviewImage.url : "None",
 
+
         }
     }));
 
@@ -221,7 +223,7 @@ event.get('/:eventId', async (req, res, next) => {
 
 
 
-    return res.json(flatten);
+    return res.json(flatten[0]);
 });
 
 

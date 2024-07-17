@@ -12,6 +12,7 @@ import SingleGroup from './components/Groups/SingleGroup';
 import Events from './components/Events/Event';
 
 import { restoreUser } from './store/session';
+import SingleEvent from './components/Events/SingleEvent';
 
 
 //Create a layout for all components
@@ -82,7 +83,7 @@ const router = createBrowserRouter([
       {
         path: 'events/:eventId',
         element:
-          <h1>HELLO</h1>
+          <SingleEvent />
       }
 
     ]

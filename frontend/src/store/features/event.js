@@ -3,8 +3,7 @@ import { csrfFetch } from '../csrf';
 
 //ACTION TYPES
 const GET_ALL_EVENTS = 'events/getAllEvents';
-
-
+const GET_EVENT_DETAIL = 'events/getDetails'
 
 //========================================REGULAR ACTION CREATOR==========================================
 export const getAllEvents = (events) => ({
@@ -12,7 +11,10 @@ export const getAllEvents = (events) => ({
     events
 });
 
-
+export const getEventDetails = (event) => ({
+    type: GET_EVENT_DETAIL,
+    event
+});
 
 
 
@@ -30,6 +32,16 @@ export const allEvents = () => async (dispatch) => {
 };
 
 
+export const eventDetails = (eventId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/events/${eventId}`);
+
+    const data = await response.json();
+    dispatch(getEventDetails(data));
+
+    return response;
+
+};
+
 
 //===============================================REDUCERS=================================================
 const event = (state = [], action) => {
@@ -41,6 +53,10 @@ const event = (state = [], action) => {
             action.events.forEach((event) => {
                 eventState[event.id] = event;
             })
+            return eventState;
+        }
+        case GET_EVENT_DETAIL: {
+            const eventState = { ...state, event: { ...action.event } };
             return eventState;
         }
     }
