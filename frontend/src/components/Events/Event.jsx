@@ -34,8 +34,8 @@ function Events() {
         <div className='centerContainer'>
             {
                 eventList.map((event) => (
-                    <div>
-                        <div key={`event${event.id}`} className='eventList'>
+                    <div key={`event${event.id}`}>
+                        <div className='eventList'>
                             <div>
                                 {
                                     event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' onClick={toEvent(event.id)} /> : ''

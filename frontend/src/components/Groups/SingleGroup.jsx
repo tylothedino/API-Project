@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { oneGroup, groupEvents } from '../../store/features/group';
 import { useEffect } from 'react';
-import event from '../../store/features/event';
+
 
 function SingleGroup() {
     const { groupId } = useParams();
@@ -97,7 +97,7 @@ function SingleGroup() {
                     </h2>
 
                     <h2 className='organizerHeader'>
-                        What we're about
+                        What we&apos;re about
                         <p className='groupInfo'>
                             {group && group.about}
                         </p>
@@ -157,8 +157,8 @@ function SingleGroup() {
                                 <div className='groupEventList'>
                                     {
                                         pastEvent.map((event) => (
-                                            <div>
-                                                <div key={`event${event.id}`} className='eventList'>
+                                            <div key={`event${event.id}`}>
+                                                <div className='eventList'>
                                                     <div>
                                                         {
                                                             event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' onClick={toEvent(event.id)} /> : ''
