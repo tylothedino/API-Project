@@ -42,7 +42,7 @@ const SignupFormModal = () => {
                 .catch(async (res) => {
                     const data = await res.json();
                     setValidationErrors(data);
-                    console.log(data);
+                    // console.log(data);
 
                 });
         }
@@ -147,7 +147,7 @@ const SignupFormModal = () => {
 
                 </div>
 
-                <button type='submit'id='signupsubmitbutton'>Sign Up</button>
+                <button type='submit' id='signupsubmitbutton'>Sign Up</button>
             </form>
         </div>
     );

@@ -38,6 +38,7 @@
     flex-direction: column;
     align-items: center;
 
+    font-size: larger;
 }
 
 .navigation {
@@ -138,4 +139,13 @@
     text-align: center;
     width: 25em;
 
+}
+
+.textboxes {
+    width: 35rem;
+    font-size: xx-large;
+}
+
+.icons{
+    max-width: 20rem;
 }

@@ -39,25 +39,28 @@ function Groups() {
         <div className='centerContainer'>
             {
                 groupList.map((group) => (
-                    <div key={`group${group.id}`} className='groupList'>
-                        <div>
-                            {
-                                group.previewImage !== "No preview images available" ?
-                                    <img src={`${group.previewImage}`} className='groupListImage' onClick={toGroup(group.id)} />
-                                    :
-                                    ""
-                            }
-                        </div>
-                        <div className='meetupBody'>
-                            <div>
-                                <h3 className='groupListName' onClick={toGroup(group.id)}>{group.name}</h3>
-                                <h4 className='groupListLocation' onClick={toGroup(group.id)}>{group.city + ", " + group.state}</h4>
+                    <div key={`group${group.id}`} >
+                        <div className='groupList'>
+                            <div className='margin-top'>
+                                {
+                                    group.previewImage !== "No preview images available" ?
+                                        <img src={`${group.previewImage}`} className='eventListImage' onClick={toGroup(group.id)} />
+                                        :
+                                        ""
+                                }
                             </div>
-                            <p className='groupListDesc' onClick={toGroup(group.id)}>{group.about}</p>
-                            <p onClick={toGroup(group.id)}>{group.eventCount} event(s) ·
-                                {group.private ? " Private" : " Public"}
-                            </p>
+                            <div className='meetupBody'>
+                                <div>
+                                    <h3 className='groupListName' onClick={toGroup(group.id)}>{group.name}</h3>
+                                    <h4 className='groupListLocation' onClick={toGroup(group.id)}>{group.city + ", " + group.state}</h4>
+                                </div>
+                                <p className='groupListDesc' onClick={toGroup(group.id)}>{group.about}</p>
+                                <p onClick={toGroup(group.id)}>{group.eventCount} event(s) ·
+                                    {group.private ? " Private" : " Public"}
+                                </p>
+                            </div>
                         </div>
+
 
                     </div>
                 ))

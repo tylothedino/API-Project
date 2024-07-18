@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import OpenModalButton from "./OpenModalButton";
 import SignupFormModal from "./SignupFormModal/SignupFormModal";
 
+
+
 function Landing() {
 
     //Session - null || {user}
@@ -28,15 +30,18 @@ function Landing() {
                 <div className="links">
                     <div className="redirects">
                         <div className="allEvents">
+                            <img className='icons' src="https://help.meetup.com/hc/theming_assets/01HZH3ZAM9K7A5MB1TYYRPDBHC"></img>
                             <Link to='/groups' className='navigateTo'>See all groups</Link>
                             <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
                         </div>
                         <div className="allEvents">
+                            <img className='icons' src="https://help.meetup.com/hc/theming_assets/01HZH3Z7EK93WAJGV7FQZX3EC7"></img>
                             <Link to='/events' className='navigateTo' >Find an event</Link>
                             <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
                         </div>
                         <div className="allEvents">
-                            <Link to='/events' className={'navigateTo' + (!session ? ' disabled' : '')} >Start a new group</Link>
+                            <img className='icons' src='https://help.meetup.com/hc/theming_assets/01HZH3Z6ZADFCVDZZAA08XSC07'></img>
+                            <Link to='/groups/new' className={'navigateTo' + (!session ? ' disabled' : '')} >Start a new group</Link>
                             <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
                         </div>
                     </div>

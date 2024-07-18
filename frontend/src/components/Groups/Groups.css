@@ -3,6 +3,9 @@
     padding-bottom: 1.25rem;
     margin-top: 1.25rem;
     display: flex;
+    min-width: 46%;
+    padding-left: 1rem;
+    padding-right: 1rem;
     /* align-content: center; */
 }
 
@@ -11,6 +14,8 @@
     flex-direction: column;
     justify-content: space-around;
     margin-left: 20px;
+    width: 100%;
+    word-break: break-all;
 
 }
 
@@ -82,4 +87,62 @@
 .groupEventList .eventList {
     background-color: white;
     border-radius: 25px;
+}
+
+.groupForm {
+    border-bottom: 2px gray solid;
+    padding-bottom: 1rem;
+    font-size: large;
+}
+
+form select {
+    color: gray
+}
+
+
+.createGroupForm {
+    width: 85%;
+
+}
+
+.center {
+    display: flex;
+    align-items: center;
+}
+
+.groupForm h3 {
+    margin-bottom: 0px;
+}
+
+.groupForm input {
+    height: 1.5rem;
+    width: 25rem;
+}
+
+.groupForm .detailForm {
+    word-wrap: break-word;
+    resize: none;
+    width: 25rem;
+    height: 15rem
+}
+
+.createGroupForm button {
+    width: 10rem;
+    height: 3rem;
+    font-size: large;
+    background-color: red;
+    color: white;
+    border: 2.5px solid black;
+    margin-top: 1rem;
+    box-shadow: 2px 2px 2px black;
+
+}
+
+.groupListImage {
+    max-block-size: 90%;
+    display: flex;
+}
+
+.margin-top {
+    margin-top: 1rem;
 }
