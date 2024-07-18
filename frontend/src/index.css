@@ -13,11 +13,15 @@
 
 .descriptions {
     text-wrap: wrap;
+    display: flex;
+    font-size: small;
+
 }
 
 .landing-header {
     display: flex;
-
+    width: 60em;
+    margin-top: 2rem;
 }
 
 .disabled {
@@ -27,4 +31,60 @@
 
 .hidden {
     display: none;
+}
+
+.mainPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.howTo {
+    width: 50%;
+    margin-top: 2em;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.redirects {
+    display: flex;
+    width: 80%;
+}
+
+.redirects div {
+    width: 33%;
+    text-align: center;
+
+}
+
+.links div .descriptions {
+    width: 85%;
+}
+
+.allEvents {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.join button {
+    background-color: teal;
+    color: white;
+    height: 3em;
+    width: 8em;
+    box-shadow: 3px 3px 2px black;
+}
+
+.join button:hover {
+    cursor: pointer;
 }

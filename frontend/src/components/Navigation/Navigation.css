@@ -52,6 +52,7 @@ NavLink {
     color: #F64060;
     text-decoration: none;
     margin-left: 5px;
+    font-size: 2rem;
 }
 
 .eventGroupNav {

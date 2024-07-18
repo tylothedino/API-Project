@@ -50,11 +50,14 @@ const LoginFormModal = () => {
         // );
 
 
+
+
         return dispatch(loginUser(user))
             .then(closeModal)
             .catch(async (res) => {
                 const data = await res.json();
                 setValidationErrors(data);
+                // console.log(validationErrors)
 
             });
 
@@ -72,43 +75,62 @@ const LoginFormModal = () => {
 
                 <h2 className="loginTitle">Login</h2>
 
-                {/* Credential (Username/Email) */}
-                <div className="credential">
-                    {/* Input box */}
-                    <input
-                        type='text'
-                        onChange={(e) => setCredential(e.target.value)}
-                        value={credential}
-                        placeholder="Username/Email"
-                        name='credential'
-                    // required
-                    />
-                </div>
-                {/* Password */}
-                <div className="password">
-                    {/* Input box */}
-                    <input
-                        type='password'
-                        onChange={(e) => setPassword(e.target.value)}
-                        value={password}
-                        placeholder="Password"
-                        name='password'
-                    // required
-                    />
+                <div className="contentBox">
+                    {/* Credential (Username/Email) */}
+                    <div className="center">
+                        {/* Errors */}
+                        <div className="errors credentials">
+                            <section>
+                                {
+
+                                    validationErrors.errors && < p > The provided credentials were invalid.</p>
+                                }
+                            </section>
+
+
+                        </div>
+                        {/* Input box */}
+                        <input className="credentials"
+                            type='text'
+                            onChange={(e) => setCredential(e.target.value)}
+                            value={credential}
+                            placeholder="Username/Email"
+                            name='credential'
+                        // required
+                        />
+                    </div>
+                    {/* Password */}
+                    <div className="center">
+                        {/* Input box */}
+                        <input
+                            className="credentials"
+                            type='password'
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                            placeholder="Password"
+                            name='password'
+                        // required
+                        />
+
+                    </div>
+
+
+
+                    <button type='submit'>Login</button>
+
+                    <button className='demoUser'
+                        onClick={() => {
+                            setCredential("JohnD")
+                            setPassword('password1')
+                        }
+                        }
+                        type="submit"
+                    >Demo User</button>
 
                 </div>
 
-                {/* Errors */}
-                <div className="errors">
-                    {
-                        validationErrors.message && <p>{validationErrors.message}</p>
-                    }
-                </div>
-
-                <button type='submit'>Login</button>
-
-            </form>
-        </div>
+            </form >
+        </div >
     );
 
 

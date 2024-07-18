@@ -1,0 +1,54 @@
+#modal-content {
+    border-radius: 25px;
+    width: 25rem;
+    height: 13em;
+    display: flex;
+    justify-content: center;
+}
+
+.loginTitle {
+    display: flex;
+    justify-content: center;
+}
+
+.loginBox {
+    width: 85%;
+
+}
+
+.loginBox form {
+    display: flex;
+    flex-direction: column;
+}
+
+.errors p {
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.loginTitle {
+    margin-bottom: 10px;
+}
+
+.credentials {
+    display: flex;
+}
+
+.contentBox {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.credentials {
+    margin-bottom: 8px;
+}
+
+
+.contentBox button {
+    align-self: center;
+    width: max-content;
+    background-color: red;
+    color: white;
+    margin-top: 5px;
+}

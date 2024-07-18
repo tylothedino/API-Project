@@ -26,20 +26,22 @@ function Landing() {
                     <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </section>
                 <div className="links">
-                    <div className="allGroups">
-                        <Link to='/groups' className='navigateTo'>See all groups</Link>
-                        <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
-                    </div>
-                    <div className="allEvents">
-                        <Link to='/events' className='navigateTo' >Find an event</Link>
-                        <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
-                    </div>
-                    <div className="startGroup">
-                        <Link to='/events' className={'navigateTo' + (!session ? ' disabled' : '')} >Start a new group</Link>
-                        <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
+                    <div className="redirects">
+                        <div className="allEvents">
+                            <Link to='/groups' className='navigateTo'>See all groups</Link>
+                            <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
+                        </div>
+                        <div className="allEvents">
+                            <Link to='/events' className='navigateTo' >Find an event</Link>
+                            <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
+                        </div>
+                        <div className="allEvents">
+                            <Link to='/events' className={'navigateTo' + (!session ? ' disabled' : '')} >Start a new group</Link>
+                            <p className="descriptions">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor</p>
+                        </div>
                     </div>
 
-                    <div className={(session ? 'hidden' : '')}>
+                    <div className={(session ? 'hidden join' : 'join')}>
                         <OpenModalButton
                             buttonText="Join Meetup"
                             modalComponent={<SignupFormModal />}
