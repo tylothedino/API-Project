@@ -1,7 +1,8 @@
 #modal-content {
     border-radius: 25px;
     width: 25rem;
-    height: 13em;
+    height: auto;
+    padding-bottom: 2em;
     display: flex;
     justify-content: center;
 }
@@ -47,7 +48,8 @@
 
 .contentBox button {
     align-self: center;
-    width: max-content;
+    width: 25em;
+    height: 3em;
     background-color: red;
     color: white;
     margin-top: 5px;

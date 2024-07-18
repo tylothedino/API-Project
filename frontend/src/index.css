@@ -88,3 +88,33 @@
 .join button:hover {
     cursor: pointer;
 }
+
+
+.signupBox form {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+}
+
+#signuphead {
+    display: flex;
+    justify-content: center;
+    margin-top: .5em;
+}
+
+.signupsections {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.signupsections input {
+    margin-bottom: .5em;
+}
+
+#signupsubmitbutton {
+    background-color: red;
+    color: white;
+    height: 3em;
+    box-shadow: 3px 3px 2px black;
+}

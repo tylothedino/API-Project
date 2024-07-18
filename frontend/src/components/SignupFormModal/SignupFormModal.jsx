@@ -63,68 +63,91 @@ const SignupFormModal = () => {
     return (
         <div className="signupBox">
             <form onSubmit={handleSubmit}>
-                <label>
-                    Email
-                    <input
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </label>
-                {validationErrors.errors && <p className="errors">{validationErrors.errors.email}</p>}
-                <label>
-                    Username
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </label>
-                {validationErrors.errors && <p className="errors">{validationErrors.errors.username}</p>}
-                <label>
-                    First Name
+                <h3 id='signuphead'>Sign Up</h3>
+
+                <div className="errorsection">
+                    {validationErrors.errors && <p className="errors">{validationErrors.errors.firstName}</p>}
+                    {validationErrors.errors && <p className="errors">{validationErrors.errors.lastName}</p>}
+
+                    {validationErrors.errors && <p className="errors">{validationErrors.errors.email}</p>}
+                    {validationErrors.errors && <p className="errors">{validationErrors.errors.username}</p>}
+
+                    {validationErrors.errors && <p className="errors">{validationErrors.errors.password}</p>}
+                    {validationErrors.confirmPassword && <p className="errors">{validationErrors.confirmPassword}</p>}
+
+                </div>
+
+                <div className="signupsections">
+                    <label>
+                        First Name
+                    </label>
                     <input
                         type="text"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         required
                     />
-                </label>
-                {validationErrors.errors && <p className="errors">{validationErrors.errors.firstName}</p>}
-                <label>
-                    Last Name
+
+                    <label>
+                        Last Name
+                    </label>
                     <input
                         type="text"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         required
                     />
-                </label>
-                {validationErrors.errors && <p className="errors">{validationErrors.errors.lastName}</p>}
-                <label>
-                    Password
+
+                </div>
+
+                <div className="signupsections">
+                    <label>
+                        Email
+
+                    </label>
+                    <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+
+                    <label>
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+
+                </div>
+
+                <div className="signupsections">
+                    <label>
+                        Password
+                    </label>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                </label>
-                {validationErrors.errors && <p className="errors">{validationErrors.errors.password}</p>}
-                <label>
-                    Confirm Password
+
+                    <label>
+                        Confirm Password
+                    </label>
                     <input
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                     />
-                </label>
-                {validationErrors.confirmPassword && <p className="errors">{validationErrors.confirmPassword}</p>}
 
-                <button type='submit'>Sign Up</button>
+                </div>
+
+                <button type='submit'id='signupsubmitbutton'>Sign Up</button>
             </form>
         </div>
     );
