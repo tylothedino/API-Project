@@ -9,6 +9,10 @@
     /* align-content: center; */
 }
 
+.eventList:hover {
+    cursor: pointer;
+}
+
 .meetupBody {
     display: flex;
     flex-direction: column;

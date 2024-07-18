@@ -116,7 +116,7 @@ const LoginFormModal = () => {
 
 
 
-                    <button type='submit'>Login</button>
+                    <button type='submit' disabled={(password.length < 6) || (credential.length < 4)}>Login</button>
 
                     <button className='demoUser'
                         onClick={() => {

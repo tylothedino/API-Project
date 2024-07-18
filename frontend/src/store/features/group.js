@@ -7,6 +7,7 @@ const GET_GROUP = 'groups/getGroup';
 const GET_GROUP_EVENTS = 'groups/getGroupEvents';
 const CREATE_GROUP = 'groups/createGroup';
 const ADD_IMAGE_GROUP = 'groups/addImage';
+const GET_USER_GROUP = 'groups/user'
 
 //========================================REGULAR ACTION CREATOR==========================================
 
@@ -41,6 +42,11 @@ export const addImage = (image) => ({
     type: ADD_IMAGE_GROUP,
     image
 })
+
+export const getUserGroup = (groups) => ({
+    type: GET_USER_GROUP,
+    groups
+});
 
 //========================================THUNK ACTION CREATOR============================================
 
@@ -109,6 +115,18 @@ export const createGroupImage = (groupId, image) => async (dispatch) => {
 
 };
 
+//GET ALL USER'S GROUPS
+
+export const userGroups = () => async (dispatch) => {
+    const response = await csrfFetch('/api/groups/current');
+
+    const data = await response.json();
+
+    dispatch(getUserGroup(data));
+
+    return response;
+}
+
 
 //===============================================REDUCERS=================================================
 
@@ -150,6 +168,11 @@ const group = (state = [], action) => {
 
         case ADD_IMAGE_GROUP: {
             const groupState = { ...state, groupImage: { ...action.image } };
+            return groupState;
+        }
+
+        case GET_USER_GROUP: {
+            const groupState = { ...state, groups: [...action.groups] };
             return groupState;
         }
 

@@ -6,11 +6,15 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
+// import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 function ProfileButton({ user }) {
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
+    const nav = useNavigate();
 
     const toggleMenu = (e) => {
         e.stopPropagation(); // Keep click from bubbling up to document and triggering closeMenu
@@ -36,22 +40,37 @@ function ProfileButton({ user }) {
         dispatch(sessionActions.logout());
     };
 
+    const toGroup = () => {
+        return nav("/groups/current")
+    }
+
     const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
     return (
-        <>
-            <button onClick={toggleMenu}>
+        <div>
+            <button className='profilePicButton' onClick={toggleMenu}>
                 <FaUserCircle />
             </button>
+
             <ul className={ulClassName} ref={ulRef}> {/* <-- Attach it here */}
-                <li>{user.username}</li>
-                <li>{user.firstName} {user.lastName}</li>
-                <li>{user.email}</li>
-                <li>
-                    <button onClick={logout}>Log Out</button>
-                </li>
+                <div className='partition'>
+                    <li>Hello, {user.firstName}</li>
+                    {/* <li>{user.firstName} {user.lastName}</li> */}
+                    <li>{user.email}</li>
+                </div>
+                <div className='partition'>
+                    <button className='profileButton' onClick={toGroup}>Your groups</button>
+                </div>
+                <div className='partition noBottom'>
+                    <li>
+                        <button className='profileButton' onClick={logout}>Log Out</button>
+                    </li>
+                </div>
+
             </ul>
-        </>
+
+        </div>
+
     );
 }
 

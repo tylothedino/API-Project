@@ -49,11 +49,18 @@ function CreateGroup() {
             })
         ).catch(async (res) => {
             const data = await res.json();
+
+            const errorsValidate = {};
+
             if (!fileType.find((type) => type === groupImage)) {
-                setValidationErrors({ ...data, url: "Image URL must end in .png, .jpg, or .jpeg" })
-            } else {
-                setValidationErrors(data);
+                // setValidationErrors({ ...data, url: "Image URL must end in .png, .jpg, or .jpeg" })
+                errorsValidate.url = "Image URL must end in .png, .jpg, or .jpeg";
             }
+
+            if (name.length === 0) {
+                errorsValidate.name = "Name is required";
+            }
+            setValidationErrors({ ...data, ...errorsValidate });
 
         });
 
@@ -72,7 +79,7 @@ function CreateGroup() {
             navigate(`/groups/${group.newGroup.id}`);
         }
 
-    }, [group.newGroup, dispatch, createGroupImage, groupImage])
+    }, [group.newGroup, dispatch, groupImage, hasSubmit, navigate])
 
     useEffect(() => {
         if (location.search(',') !== -1) {
@@ -86,7 +93,9 @@ function CreateGroup() {
         }
     }, [location]);
 
-
+    useEffect(() => {
+        document.title = "Start a new group"
+    }, [])
 
 
     // useEffect(() => {
@@ -98,6 +107,7 @@ function CreateGroup() {
     return (
 
         <div className="center">
+            <title>Start a New Group</title>
             <form className="createGroupForm" onSubmit={handleSubmit}>
                 <div className="groupForm">
                     <h4>BECOME AN ORGANIZER</h4>
@@ -136,7 +146,7 @@ function CreateGroup() {
                         onChange={(e) => setName(e.target.value)}
 
                     />
-                    {validationErrors.errors && validationErrors.errors.name && <p className="errors">Name is required</p>}
+                    {validationErrors.name && <p className="errors">{validationErrors.name}</p>}
                 </div>
 
                 <div className="groupForm">

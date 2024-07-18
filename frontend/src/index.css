@@ -146,6 +146,32 @@
     font-size: xx-large;
 }
 
-.icons{
+.icons {
     max-width: 20rem;
+}
+
+li {
+    list-style-type: none;
+}
+
+.profile-dropdown {
+    position: absolute;
+    right: 2rem;
+    padding-left: 0;
+    background-color: white;
+    border: solid black 2px;
+
+    padding: 10px;
+    margin-top: .5rem;
+}
+
+.partition {
+    border-bottom: black solid;
+    margin-bottom: 0px;
+    padding: .5em
+}
+
+
+.noBottom {
+    border-bottom: none;
 }

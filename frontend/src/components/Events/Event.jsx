@@ -19,7 +19,17 @@ function Events() {
     let eventList;
 
     if (events) {
-        eventList = Object.values(events);
+        eventList = Object.values(events).sort(compareDates);
+    }
+
+    function compareDates(a, b) {
+        if (a.startDate < b.startDate) {
+            return -1;
+        } else if (a.startDate > b.startDate) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     function toEvent(eventId) {
@@ -35,18 +45,18 @@ function Events() {
             {
                 eventList.map((event) => (
                     <div key={`event${event.id}`}>
-                        <div className='eventList'>
+                        <div className='eventList' onClick={toEvent(event.id)} >
                             <div>
                                 {
-                                    event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' onClick={toEvent(event.id)} /> : ''
+                                    event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' /> : ''
                                 }
                             </div>
 
                             <div className='meetupBody'>
 
-                                <h4 className='eventListSchedule' onClick={toEvent(event.id)}>{event.startDate.split(" ").join(" · ")}</h4>
-                                <h3 className='eventListName' onClick={toEvent(event.id)}>{event.name}</h3>
-                                <h4 className='eventListLocation' onClick={toEvent(event.id)}>{event.Venue.city}, {event.Venue.state}</h4>
+                                <h4 className='eventListSchedule'>{event.startDate.split(" ").join(" · ")}</h4>
+                                <h3 className='eventListName' >{event.name}</h3>
+                                <h4 className='eventListLocation' >{event.Venue.city}, {event.Venue.state}</h4>
 
                             </div>
 

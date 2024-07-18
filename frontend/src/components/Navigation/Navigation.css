@@ -33,8 +33,8 @@ NavLink {
 .userNav {
     /* background-color: black; */
     display: flex;
-    justify-content: space-between;
-    width: 10rem;
+    justify-content: flex-end;
+    width: 30rem;
     margin-right: 30px;
 }
 
@@ -73,4 +73,14 @@ NavLink {
     justify-content: space-between;
     font-size: 30px;
     min-width: 190px;
+}
+
+.profileNav {
+    display: flex;
+
+
+}
+
+.profileButton {
+    padding: 0;
 }

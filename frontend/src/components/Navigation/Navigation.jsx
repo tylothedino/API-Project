@@ -38,7 +38,8 @@ function Navigation({ isLoaded }) {
 
     const sessionLinks = sessionUser ? (
         <>
-            <div>
+            <div className='profileNav'>
+                <NavLink to='/groups/new'>Start a new group</NavLink>
                 <ProfileButton user={sessionUser} />
             </div>
             {/* <li>

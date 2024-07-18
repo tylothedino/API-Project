@@ -40,21 +40,21 @@ function Groups() {
             {
                 groupList.map((group) => (
                     <div key={`group${group.id}`} >
-                        <div className='groupList'>
+                        <div className='groupList' onClick={toGroup(group.id)} >
                             <div className='margin-top'>
                                 {
                                     group.previewImage !== "No preview images available" ?
-                                        <img src={`${group.previewImage}`} className='eventListImage' onClick={toGroup(group.id)} />
+                                        <img src={`${group.previewImage}`} className='eventListImage' />
                                         :
                                         ""
                                 }
                             </div>
                             <div className='meetupBody'>
                                 <div>
-                                    <h3 className='groupListName' onClick={toGroup(group.id)}>{group.name}</h3>
-                                    <h4 className='groupListLocation' onClick={toGroup(group.id)}>{group.city + ", " + group.state}</h4>
+                                    <h3 className='groupListName' >{group.name}</h3>
+                                    <h4 className='groupListLocation' >{group.city + ", " + group.state}</h4>
                                 </div>
-                                <p className='groupListDesc' onClick={toGroup(group.id)}>{group.about}</p>
+                                <p className='groupListDesc' >{group.about}</p>
                                 <p onClick={toGroup(group.id)}>{group.eventCount} event(s) ·
                                     {group.private ? " Private" : " Public"}
                                 </p>
