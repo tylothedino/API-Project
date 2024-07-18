@@ -10,6 +10,7 @@ import GroupEventNavigation from './components/Navigation/GroupEventNavigation';
 import Groups from './components/Groups/Groups';
 import SingleGroup from './components/Groups/SingleGroup';
 import Events from './components/Events/Event';
+import Landing from './components/Landing';
 
 import { restoreUser } from './store/session';
 import SingleEvent from './components/Events/SingleEvent';
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
 
       {
         path: '/',
-        element: <h1>Welcome</h1>
+        element: <Landing />
       },
       {
         path: '*',
