@@ -202,7 +202,7 @@ function SingleGroup() {
 
                                                         <h4 className='eventListSchedule' onClick={toEvent(event.id)}>{event.startDate.split(" ").join(" · ")}</h4>
                                                         <h3 className='eventListName' onClick={toEvent(event.id)}>{event.name}</h3>
-                                                        <h4 className='eventListLocation' onClick={toEvent(event.id)}>{event.Venue.city}, {event.Venue.state}</h4>
+                                                        <h4 className='eventListLocation' onClick={toEvent(event.id)}>{event.Venue && event.Venue.city}, {event.Venue && event.Venue.state}</h4>
 
                                                     </div>
                                                     <p className='description' onClick={toEvent(event.id)}>
@@ -234,19 +234,19 @@ function SingleGroup() {
                                 <div className='groupEventList'>
                                     {
                                         pastEvent.map((event) => (
-                                            <div key={`event${event.id}`}>
-                                                <div className='eventList'>
+                                            <div key={`event${event.id}`} onClick={toEvent(event.id)}>
+                                                <div className='eventList' >
                                                     <div>
                                                         {
-                                                            event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' onClick={toEvent(event.id)} /> : ''
+                                                            event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' /> : ''
                                                         }
                                                     </div>
 
                                                     <div className='meetupBody'>
 
-                                                        <h4 className='eventListSchedule' onClick={toEvent(event.id)}>{event.startDate.split(" ").join(" · ")}</h4>
-                                                        <h3 className='eventListName' onClick={toEvent(event.id)}>{event.name}</h3>
-                                                        <h4 className='eventListLocation' onClick={toEvent(event.id)}>{event.Venue.city}, {event.Venue.state}</h4>
+                                                        <h4 className='eventListSchedule' >{event.startDate.split(" ").join(" · ")}</h4>
+                                                        <h3 className='eventListName' >{event.name}</h3>
+                                                        <h4 className='eventListLocation'>{event.Venue.city}, {event.Venue.state}</h4>
 
                                                     </div>
 

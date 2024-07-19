@@ -563,84 +563,121 @@ group.get('/:groupId/events', async (req, res, next) => {
 
 group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
 
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    // const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
-    const { user } = req;
-    //Search for Group by ID
-    const groupId = parseInt(req.params.groupId);
-    const findGroup = await Group.findByPk(groupId);
+    // const { user } = req;
+    // //Search for Group by ID
+    // const groupId = parseInt(req.params.groupId);
+    // const findGroup = await Group.findByPk(groupId);
 
 
-    //If a group couldn't be found
-    if (!findGroup) {
-        const err = new Error("Group couldn't be found");
-        err.status = 404;
-        return next(err);
+    // //If a group couldn't be found
+    // if (!findGroup) {
+    //     const err = new Error("Group couldn't be found");
+    //     err.status = 404;
+    //     return next(err);
+    // }
+
+    // //====================================
+
+
+    // //====================================
+
+    // const membershipStatus = await Membership.findOne({
+    //     where: {
+    //         userId: user.id,
+    //         groupId: groupId
+    //     }
+    // });
+
+    // // console.log(membershipStatus.status);
+
+    // if (findGroup.organizerId !== user.id && !membershipStatus) {
+    //     const err = new Error("Forbidden");
+    //     err.status = 403;
+    //     return next(err);
+    // }
+
+    // if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
+    //     const err = new Error("Forbidden");
+    //     err.status = 403;
+    //     return next(err);
+    // }
+
+    // //============================================
+
+    // let createEvent;
+
+    // //If Venue couldn't be found
+
+    // try {
+    //     createEvent = await Event.create({
+    //         venueId, name, type, capacity, price, description, startDate, endDate, groupId
+    //     });
+
+    // } catch (err) {
+    //     err.message = 'Bad Request';
+    //     err.errors = err.errors
+    //     err.status = 400;
+    //     return next(err)
+
+    // }
+    // const findVenue = await Venue.findByPk(venueId);
+    // if (!findVenue) {
+    //     const err = new Error("Venue couldn't be found");
+    //     err.status = 404;
+    //     return next(err);
+    // }
+
+
+
+    // createEvent.groupId = groupId;
+
+    // delete createEvent.dataValues.createdAt;
+    // delete createEvent.dataValues.updatedAt;
+
+    // createEvent.dataValues.startDate = changeDate(createEvent.dataValues.startDate);
+
+    // createEvent.dataValues.endDate = changeDate(createEvent.dataValues.endDate);
+
+    // return res.json(createEvent);
+
+    /*
+    let { group, image } = req.body
+
+
+    // return res.json(image.groupImage.slice(-6))
+    let newGroup = await Group.create(group)
+
+    let newImage
+    if (image !== undefined) {
+        newImage = await GroupImage.create({ url: image.groupImage, preview: image.preview, groupId: newGroup.id })
+        return res.json({ image: newImage, group: newGroup })
     }
 
-    //====================================
 
 
-    //====================================
+    return res.json({ group: newGroup })
 
-    const membershipStatus = await Membership.findOne({
-        where: {
-            userId: user.id,
-            groupId: groupId
-        }
-    });
+    */
 
-    // console.log(membershipStatus.status);
 
-    if (findGroup.organizerId !== user.id && !membershipStatus) {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
-    }
+    let { image, event, eventId } = req.body;
 
-    if (findGroup.organizerId !== user.id && membershipStatus.status !== 'co-host') {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        return next(err);
-    }
+    //createEvent = await Event.create({
+    //         venueId, name, type, capacity, price, description, startDate, endDate, groupId
+    // return res.json(image.groupImage.slice(-6))
+    let newEvent = await Event.create({ ...event, eventId })
 
-    //============================================
-
-    let createEvent;
-
-    //If Venue couldn't be found
-
-    try {
-        createEvent = await Event.create({
-            venueId, name, type, capacity, price, description, startDate, endDate, groupId
-        });
-
-    } catch (err) {
-        err.message = 'Bad Request';
-        err.errors = err.errors
-        err.status = 400;
-        return next(err)
-
-    }
-    const findVenue = await Venue.findByPk(venueId);
-    if (!findVenue) {
-        const err = new Error("Venue couldn't be found");
-        err.status = 404;
-        return next(err);
+    let newImage
+    if (image !== undefined) {
+        newImage = await EventImage.create({ ...image, eventId })
+        return res.json({ image: newImage, event: newEvent })
     }
 
 
 
-    createEvent.groupId = groupId;
-
-    delete createEvent.dataValues.createdAt;
-    delete createEvent.dataValues.updatedAt;
-
-    createEvent.dataValues.startDate = changeDate(createEvent.dataValues.startDate);
-
-    createEvent.dataValues.endDate = changeDate(createEvent.dataValues.endDate);
-
-    return res.json(createEvent);
+    return res.json({ event: newEvent })
 
 });
 

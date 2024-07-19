@@ -38,10 +38,11 @@ function ProfileButton({ user }) {
     const logout = (e) => {
         e.preventDefault();
         dispatch(sessionActions.logout());
+        nav('/');
     };
 
     const toGroup = () => {
-        return nav("/groups/current")
+        return nav("/groups/")
     }
 
     const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -59,7 +60,7 @@ function ProfileButton({ user }) {
                     <li>{user.email}</li>
                 </div>
                 <div className='partition'>
-                    <button className='profileButton' onClick={toGroup}>Your groups</button>
+                    <button className='profileButton' onClick={toGroup}>All groups</button>
                 </div>
                 <div className='partition noBottom'>
                     <li>

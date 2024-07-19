@@ -20,6 +20,7 @@ function CreateGroup() {
 
 
 
+
     const [validationErrors, setValidationErrors] = useState({});
     const [urlError, setUrlError] = useState({});
     const [hasSubmit, setSubmit] = useState(false);
@@ -60,7 +61,10 @@ function CreateGroup() {
 
         });
 
-        setSubmit(true);
+        if (Object.keys(validationErrors).length > 0) {
+            setSubmit(true);
+        }
+
 
     }
 

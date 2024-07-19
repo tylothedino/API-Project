@@ -30,6 +30,11 @@ function SingleEvent() {
 
     }
 
+    function formatDate(date) {
+
+        return date.split(" ").join(" · ")
+    }
+
     useEffect(() => {
         dispatch(eventDetails(eventId));
 
@@ -79,14 +84,14 @@ function SingleEvent() {
                                         <h3>END</h3>
                                     </div>
                                     <div className='scheduleDetails'>
-                                        <h4 className='time'> {event && event.startDate}</h4>
-                                        <h4 className='time'> {event && event.endDate}</h4>
+                                        <h4 className='time'> {event && formatDate(event.startDate)}</h4>
+                                        <h4 className='time'> {event && formatDate(event.endDate)}</h4>
                                     </div>
 
                                 </div>
 
                                 <div className='price'>
-                                    <h3>💰 {event && (event.price === 0 ? "FREE" : Number(event.price).toFixed(2))}</h3>
+                                    <h3> {event && (event.price <= 0 ? "FREE" : ("💵" + Number(event.price).toFixed(2)))}</h3>
                                 </div>
 
                                 <div className='location'>

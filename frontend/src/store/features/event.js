@@ -3,7 +3,8 @@ import { csrfFetch } from '../csrf';
 
 //ACTION TYPES
 const GET_ALL_EVENTS = 'events/getAllEvents';
-const GET_EVENT_DETAIL = 'events/getDetails'
+const GET_EVENT_DETAIL = 'events/getDetails';
+const CREATE_EVENT = 'events/new';
 
 //========================================REGULAR ACTION CREATOR==========================================
 export const getAllEvents = (events) => ({
@@ -16,6 +17,10 @@ export const getEventDetails = (event) => ({
     event
 });
 
+export const createEvent = (event) => ({
+    type: CREATE_EVENT,
+    event
+})
 
 
 //========================================THUNK ACTION CREATOR============================================
@@ -42,6 +47,18 @@ export const eventDetails = (eventId) => async (dispatch) => {
 
 };
 
+export const newEvent = (event, image, groupId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/groups/${groupId}/events`, {
+        method: "POST",
+        body: JSON.stringify({ event, image })
+    })
+
+    const data = await response.json();
+    dispatch(createEvent(data));
+
+    return response;
+}
+
 
 //===============================================REDUCERS=================================================
 const event = (state = [], action) => {
@@ -57,6 +74,10 @@ const event = (state = [], action) => {
         }
         case GET_EVENT_DETAIL: {
             const eventState = { ...state, event: { ...action.event } };
+            return eventState;
+        }
+        case CREATE_EVENT: {
+            const eventState = { ...state, event: { ...action.event } }
             return eventState;
         }
     }

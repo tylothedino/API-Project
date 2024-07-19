@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 // import { Navigate } from "react-router-dom";
 import { useModal } from '../../context/Modal';
@@ -24,6 +24,8 @@ const SignupFormModal = () => {
     // const user = useSelector(state => state.session.user);
 
     // if (user) return <Navigate to='/' replace={true} />
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -54,6 +56,18 @@ const SignupFormModal = () => {
 
 
     };
+
+    const [buttonDisabled, setButtonDisabled] = useState(true);
+
+    useEffect(() => {
+        if ((firstName.trim() === '' || lastName.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') && username.length < 4 || password.length < 6) {
+
+            setButtonDisabled(true);
+
+        } else {
+            setButtonDisabled(false)
+        }
+    }, [firstName, lastName, email, password, confirmPassword, username.length])
 
     const reset = () => {
         setPassword('');
@@ -147,7 +161,7 @@ const SignupFormModal = () => {
 
                 </div>
 
-                <button type='submit' id='signupsubmitbutton'>Sign Up</button>
+                <button type='submit' id='signupsubmitbutton' hidden={buttonDisabled}>Sign Up</button>
             </form>
         </div>
     );
