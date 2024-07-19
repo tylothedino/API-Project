@@ -17,6 +17,7 @@ import UserGroups from './components/Groups/UserGroups';
 
 import { restoreUser } from './store/session';
 import SingleEvent from './components/Events/SingleEvent';
+import UpdateGroup from './components/Groups/UpdateGroup';
 
 
 //Create a layout for all components
@@ -104,6 +105,11 @@ const router = createBrowserRouter([
         path: 'groups/current',
         element:
           <UserGroups />
+      },
+      {
+        path: 'groups/:groupId/edit',
+        element:
+          <UpdateGroup />
       }
 
     ]

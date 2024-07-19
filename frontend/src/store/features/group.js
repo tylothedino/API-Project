@@ -11,6 +11,8 @@ const GET_USER_GROUP = 'groups/user';
 // const GET_MEMBERS = 'groups/getMembers'
 const DELETE_GROUP = 'group/delete'
 
+const UPDATE_GROUP = 'group/update'
+
 //========================================REGULAR ACTION CREATOR==========================================
 
 //Get every group in Meetup
@@ -64,6 +66,11 @@ export const deleteGroup = (message) => ({
     type: DELETE_GROUP,
     message
 });
+
+export const updateGroup = (group) => ({
+    type: UPDATE_GROUP,
+    group
+})
 
 //========================================THUNK ACTION CREATOR============================================
 
@@ -168,6 +175,19 @@ export const destroyGroup = (groupId) => async (dispatch) => {
 }
 
 
+export const changeGroup = (group, groupId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+        method: "PUT",
+        body: JSON.stringify(group)
+    });
+
+    const data = await response.json();
+
+    dispatch(updateGroup(data));
+
+    return response;
+}
+
 //===============================================REDUCERS=================================================
 
 //Group initial state
@@ -226,6 +246,10 @@ const group = (state = [], action) => {
         case DELETE_GROUP: {
             const groupState = { ...state, deleteMessage: action.message }
             return groupState;
+        }
+        case UPDATE_GROUP: {
+            const groupState = { ...state, ...action.group }
+            return groupState
         }
 
     }
