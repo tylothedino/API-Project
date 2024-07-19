@@ -12,6 +12,7 @@ import SingleGroup from './components/Groups/SingleGroup';
 import Events from './components/Events/Event';
 import Landing from './components/Landing';
 import CreateGroup from './components/Groups/CreateGroup';
+import CreateEvent from './components/Events/CreateEvent';
 import UserGroups from './components/Groups/UserGroups';
 
 import { restoreUser } from './store/session';
@@ -93,6 +94,11 @@ const router = createBrowserRouter([
         element:
           <CreateGroup />
 
+      },
+      {
+        path: 'groups/:groupId/events/new',
+        element:
+          <CreateEvent />
       },
       {
         path: 'groups/current',

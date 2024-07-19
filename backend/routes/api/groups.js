@@ -171,31 +171,52 @@ group.post('/', [requireAuth], async (req, res, next) => {
 
     const { user } = req;
 
-    const { name, about, type, private, city, state } = req.body;
+    // const { name, about, type, private, city, state } = req.body;
 
-    let newGroup;
-    //Try to create a group
-    try {
-        //An error is thrown here when there is a attribute error
-        newGroup = await Group.create({
-            organizerId: user.id, name, about, type, private, city, state,
 
-        });
+    // let newGroup;
+    // //Try to create a group
+    // try {
+    //     //An error is thrown here when there is a attribute error
+    //     newGroup = await Group.create({
+    //         organizerId: user.id, name, about, type, private, city, state,
 
+    //     });
+
+    // }
+    // //If the model validation/constraint finds and Error, catch the error and send it to the error handler
+    // catch (err) {
+    //     err.message = 'Bad Request';
+    //     err.errors = err.errors
+    //     err.status = 400;
+
+    //     return next(err)
+
+    // }
+    // res.status(201);
+    // newGroup.dataValues.createdAt = changeDate(newGroup.dataValues.createdAt);
+    // newGroup.dataValues.updatedAt = changeDate(newGroup.dataValues.updatedAt);
+    // return res.json(newGroup);
+
+
+
+    // router.post("/groups", async (req, res) => {
+    let { group, image } = req.body
+
+
+    // return res.json(image.groupImage.slice(-6))
+    let newGroup = await Group.create(group)
+
+    let newImage
+    if (image !== undefined) {
+        newImage = await GroupImage.create({ url: image.groupImage, preview: image.preview, groupId: newGroup.id })
+        return res.json({ image: newImage, group: newGroup })
     }
-    //If the model validation/constraint finds and Error, catch the error and send it to the error handler
-    catch (err) {
-        err.message = 'Bad Request';
-        err.errors = err.errors
-        err.status = 400;
 
-        return next(err)
 
-    }
-    res.status(201);
-    newGroup.dataValues.createdAt = changeDate(newGroup.dataValues.createdAt);
-    newGroup.dataValues.updatedAt = changeDate(newGroup.dataValues.updatedAt);
-    return res.json(newGroup);
+
+    return res.json({ group: newGroup })
+
 
 });
 

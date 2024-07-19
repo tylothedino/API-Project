@@ -33,9 +33,10 @@ export const getGroupEvents = (events) => ({
 });
 
 //Create a group
-export const createGroup = (group) => ({
+export const createGroup = (group, image) => ({
     type: CREATE_GROUP,
-    group
+    group,
+    image
 });
 
 
@@ -104,10 +105,10 @@ export const groupEvents = (groupId) => async (dispatch) => {
 
 //CREATE GROUP
 
-export const newGroup = (group) => async (dispatch) => {
+export const newGroup = (group, image) => async (dispatch) => {
     const response = await csrfFetch('/api/groups', {
         method: 'POST',
-        body: JSON.stringify(group)
+        body: JSON.stringify({ group, image })
     });
 
     const data = await response.json();
@@ -201,7 +202,9 @@ const group = (state = [], action) => {
         }
 
         case CREATE_GROUP: {
-            const groupState = { ...state, newGroup: { ...action.group } };
+            const groupState = {
+                ...state, ...action.group
+            };
             return groupState;
         }
 

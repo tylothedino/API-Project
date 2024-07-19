@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { newGroup, createGroupImage } from "../../store/features/group";
+import { newGroup } from "../../store/features/group";
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ function CreateGroup() {
 
 
     const [validationErrors, setValidationErrors] = useState({});
-
+    const [urlError, setUrlError] = useState({});
     const [hasSubmit, setSubmit] = useState(false);
 
 
@@ -30,10 +30,17 @@ function CreateGroup() {
 
     const dispatch = useDispatch();
 
-    // const fileType = ['.jpg', '.png', '.jpeg'];
+    const fileType = ['.jpg', '.png', '.jpeg'];
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!fileType.find((type) => groupImage.slice(-6).includes(type))) {
+            setUrlError({ error: "ERRORR" })
+
+        } else {
+            setUrlError({})
+        }
 
         let privacy = null;
 
@@ -46,27 +53,24 @@ function CreateGroup() {
         dispatch(
             newGroup({
                 name, about, type, private: privacy, city, state
-            })
+            }, { groupImage, preview: true })
         ).catch(async (res) => {
             const data = await res.json();
             setValidationErrors({ ...data });
 
         });
 
-
-        if (Object.keys(validationErrors).length === 0) {
-            setSubmit(true);
-        }
+        setSubmit(true);
 
     }
 
     useEffect(() => {
-        if (group.newGroup && hasSubmit) {
-            dispatch(createGroupImage(group.newGroup.id, { url: groupImage, preview: true })).catch
-            navigate(`/groups/${group.newGroup.id}`);
+        if (group.group && hasSubmit) {
+            setSubmit(false)
+            navigate(`/groups/${group.group.id}`);
         }
 
-    }, [group.newGroup, dispatch, createGroupImage, groupImage, hasSubmit, navigate])
+    }, [dispatch, hasSubmit, group.group, navigate])
 
     useEffect(() => {
         if (location.search(',') !== -1) {
@@ -85,11 +89,12 @@ function CreateGroup() {
     }, [])
 
 
-    useEffect(() => {
-        console.log("ERRORS: ", validationErrors)
+    // useEffect(() => {
+    //     // setAllError({ ...validationErrors, urlError })
+    //     console.log("ERRORS: ", urlError)
+    //     console.log("VLAID ", validationErrors)
 
-    }, [validationErrors]);
-
+    // }, [validationErrors, urlError]);
 
     return (
 
@@ -204,7 +209,7 @@ function CreateGroup() {
                             onChange={(e) => setImage(e.target.value)}
                         />
                         {
-                            validationErrors.url && <p className="errors">Image URL must end in .png, .jpg, or .jpeg</p>
+                            Object.keys(urlError).length > 0 && <p className="errors">Image URL must end in .png, .jpg, or .jpeg</p>
                         }
 
                     </div>

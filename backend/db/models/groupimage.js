@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
           //Check to see if the ends are a file type
           const fileType = ['.jpg', '.png', '.jpeg'];
 
-          if (!fileType.find((type) => value.slice(-4))) {
+          if (!fileType.find((type) => value.slice(-6).includes(type))) {
             throw new Error("Image URL must end in .png, .jpg, or .jpeg")
 
           }

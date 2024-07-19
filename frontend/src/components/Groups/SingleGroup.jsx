@@ -80,7 +80,10 @@ function SingleGroup() {
     }
 
     function toCreateEvent() {
-        return navigate(`/groups/${group.id}/create-event`);
+        return () => {
+            return navigate(`/groups/${group.id}/events/new`);
+
+        }
 
     }
 
@@ -140,7 +143,7 @@ function SingleGroup() {
                             {
                                 isOwner && user ?
                                     <div className='actions'>
-                                        <button className='ownerActions' onClick={toCreateEvent}>Create event</button>
+                                        <button className='ownerActions' onClick={toCreateEvent()}>Create event</button>
                                         <button className='ownerActions' onClick={toUpdateGroup}>
                                             Update
                                         </button>
