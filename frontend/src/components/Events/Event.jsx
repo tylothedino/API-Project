@@ -56,7 +56,7 @@ function Events() {
 
                                 <h4 className='eventListSchedule'>{event.startDate.split(" ").join(" · ")}</h4>
                                 <h3 className='eventListName' >{event.name}</h3>
-                                <h4 className='eventListLocation' >{event.Venue.city}, {event.Venue.state}</h4>
+                                <h4 className='eventListLocation' >{event.venue && event.Venue.city}, {event.venue && event.Venue.state}</h4>
 
                             </div>
 

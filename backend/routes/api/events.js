@@ -55,12 +55,12 @@ const changeDate = (dateString) => {
 event.get('/', goodQuery, async (req, res, next) => {
 
     let { page = 1, size = 20, name, type, startDate } = req.query;
-    page = parseInt(page);
-    size = parseInt(size);
+    // page = parseInt(page);
+    // size = parseInt(size);
 
     const options = { where: {} };
-    options.limit = size;
-    options.offset = size * (page - 1);
+    // options.limit = size;
+    // options.offset = size * (page - 1);
 
     if (name) {
         options.where.name = { [Sequelize.Op.like]: "%" + name + "%" };
