@@ -3,11 +3,12 @@ import { thunk } from 'redux-thunk';
 import session from './session';
 import group from './features/group';
 import event from './features/event';
+// import membership from './features/membership';
 //Contains all reducer functions from different "stores"
 const rootReducer = combineReducers({
     session,
     group,
-    event
+    event,
 });
 
 /*

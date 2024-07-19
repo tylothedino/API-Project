@@ -7,7 +7,9 @@ const GET_GROUP = 'groups/getGroup';
 const GET_GROUP_EVENTS = 'groups/getGroupEvents';
 const CREATE_GROUP = 'groups/createGroup';
 const ADD_IMAGE_GROUP = 'groups/addImage';
-const GET_USER_GROUP = 'groups/user'
+const GET_USER_GROUP = 'groups/user';
+// const GET_MEMBERS = 'groups/getMembers'
+const DELETE_GROUP = 'group/delete'
 
 //========================================REGULAR ACTION CREATOR==========================================
 
@@ -46,6 +48,20 @@ export const addImage = (image) => ({
 export const getUserGroup = (groups) => ({
     type: GET_USER_GROUP,
     groups
+});
+
+//Get the list of alll members in group
+// export const loadMembers = (members) => ({
+//     type: GET_MEMBERS,
+//     members
+
+// });
+
+
+//DELETE GROUP
+export const deleteGroup = (message) => ({
+    type: DELETE_GROUP,
+    message
 });
 
 //========================================THUNK ACTION CREATOR============================================
@@ -109,7 +125,6 @@ export const createGroupImage = (groupId, image) => async (dispatch) => {
 
     const data = await response.json();
     dispatch(addImage(data));
-    console.log(data)
 
     return response;
 
@@ -123,6 +138,30 @@ export const userGroups = () => async (dispatch) => {
     const data = await response.json();
 
     dispatch(getUserGroup(data));
+
+    return response;
+}
+
+
+//GET ALL MEMBERS IN GROUP
+
+// export const listMembers = (groupId) => async (dispatch) => {
+//     const response = await csrfFetch(`/api/groups/${groupId}/members`);
+//     const data = await response.json();
+
+//     dispatch(loadMembers(data));
+
+
+//     return response;
+// }
+
+export const destroyGroup = (groupId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+        method: 'DELETE'
+    });
+
+    const data = await response.json();
+    dispatch(deleteGroup(data));
 
     return response;
 }
@@ -173,6 +212,16 @@ const group = (state = [], action) => {
 
         case GET_USER_GROUP: {
             const groupState = { ...state, groups: [...action.groups] };
+            return groupState;
+        }
+
+        // case GET_MEMBERS: {
+        //     const groupState = { ...state, members: { ...action.members } };
+        //     return groupState;
+        // }
+
+        case DELETE_GROUP: {
+            const groupState = { ...state, deleteMessage: action.message }
             return groupState;
         }
 

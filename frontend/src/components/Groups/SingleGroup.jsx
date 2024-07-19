@@ -3,14 +3,20 @@ import './Groups.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { oneGroup, groupEvents } from '../../store/features/group';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
+import DeleteGroupModal from './DeleteGroupModal';
+import { useModal } from '../../context/Modal';
+import { destroyGroup } from '../../store/features/group';
 
 function SingleGroup() {
     const { groupId } = useParams();
-
+    const { setModalContent, closeModal } = useModal();
     const group = useSelector((state) => state.group[groupId]);
     const groupEventsList = useSelector((state) => state.group.events);
+    const user = useSelector((state) => state.session.user);
+
+    // const memberList = useSelector((state) => state.members);
 
     const navigate = useNavigate();
 
@@ -20,9 +26,22 @@ function SingleGroup() {
         dispatch(oneGroup(groupId));
         dispatch(groupEvents(groupId));
 
+        // dispatch(listMembers(groupId));
+
     }, [dispatch, groupId]);
 
     const groupImage = group && group.GroupImages && group.GroupImages.find((image) => image.preview);
+
+
+    //Action buttons
+
+    const [isOwner, setOwner] = useState(false);
+
+    useEffect(() => {
+        if (user && group && group.Organizer) {
+            setOwner(group.Organizer.id === user.id);
+        }
+    }, [user, group, dispatch])
 
     //Event date sorting
 
@@ -60,6 +79,42 @@ function SingleGroup() {
 
     }
 
+    function toCreateEvent() {
+        return navigate(`/groups/${group.id}/create-event`);
+
+    }
+
+
+    function toUpdateGroup() {
+        return navigate(`/groups/${group.id}/edit`)
+    }
+
+    function joinGroupPop() {
+        return window.alert("Feature is coming soon!")
+    }
+
+    const nav = useNavigate();
+
+    const handleDeleteConfirm = async (groupId) => {
+        await dispatch(destroyGroup(groupId));
+        closeModal();
+        return nav('/groups');
+    };
+
+    //=========================
+
+    const handleDeleteClick = (spotId) => {
+        setModalContent(
+            <div >
+                <DeleteGroupModal
+                    onDelete={() => handleDeleteConfirm(spotId)}
+                    onClose={closeModal}
+                    message="Are you sure you want to remove this group?"
+                    type="Group"
+                />
+            </div>
+        );
+    };
 
     return (
         <div>
@@ -81,6 +136,25 @@ function SingleGroup() {
                                 <h3>{group && group.eventCount} event(s) · {group && group.private ? " Private" : " Public"}</h3>
                                 <h3>Organized by {group && group.Organizer && (group.Organizer.firstName + " " + group.Organizer.lastName)}</h3>
                             </div>
+
+                            {
+                                isOwner && user ?
+                                    <div className='actions'>
+                                        <button className='ownerActions' onClick={toCreateEvent}>Create event</button>
+                                        <button className='ownerActions' onClick={toUpdateGroup}>
+                                            Update
+                                        </button>
+                                        <button onClick={() => handleDeleteClick(group.id)}>Delete</button>
+
+                                    </div>
+                                    :
+                                    user && !isOwner ?
+                                        <div className='actions'>
+                                            <button onClick={joinGroupPop}>Join this group</button>
+                                        </div>
+                                        :
+                                        <></>
+                            }
 
                         </div>
                     </div>

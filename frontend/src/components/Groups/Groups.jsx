@@ -14,6 +14,7 @@ function Groups() {
     //Initialize the groups
     useEffect(() => {
         dispatch(allGroups());
+        // console.log(groups)
 
     }, [dispatch]);
 
@@ -39,7 +40,7 @@ function Groups() {
         <div className='centerContainer'>
             {
                 groupList.map((group) => (
-                    <div key={`group${group.id}`} >
+                    <div key={`groupList${group.id}`} >
                         <div className='groupList' onClick={toGroup(group.id)} >
                             <div className='margin-top'>
                                 {

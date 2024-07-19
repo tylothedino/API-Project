@@ -20,7 +20,18 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     url: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        correctFile(value) {
+          //Check to see if the ends are a file type
+          const fileType = ['.jpg', '.png', '.jpeg'];
+
+          if (!fileType.find((type) => value.slice(-4))) {
+            throw new Error("Image URL must end in .png, .jpg, or .jpeg")
+
+          }
+        }
+      }
     },
     preview: {
       type: DataTypes.BOOLEAN,

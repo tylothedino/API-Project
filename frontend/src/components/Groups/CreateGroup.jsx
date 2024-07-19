@@ -30,7 +30,7 @@ function CreateGroup() {
 
     const dispatch = useDispatch();
 
-    const fileType = ['.jpg', '.png', '.jpeg'];
+    // const fileType = ['.jpg', '.png', '.jpeg'];
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -49,22 +49,9 @@ function CreateGroup() {
             })
         ).catch(async (res) => {
             const data = await res.json();
-
-            const errorsValidate = {};
-
-            if (!fileType.find((type) => type === groupImage)) {
-                // setValidationErrors({ ...data, url: "Image URL must end in .png, .jpg, or .jpeg" })
-                errorsValidate.url = "Image URL must end in .png, .jpg, or .jpeg";
-            }
-
-            if (name.length === 0) {
-                errorsValidate.name = "Name is required";
-            }
-            setValidationErrors({ ...data, ...errorsValidate });
+            setValidationErrors({ ...data });
 
         });
-
-
 
 
         if (Object.keys(validationErrors).length === 0) {
@@ -75,11 +62,11 @@ function CreateGroup() {
 
     useEffect(() => {
         if (group.newGroup && hasSubmit) {
-            dispatch(createGroupImage(group.newGroup.id, { url: groupImage, preview: true }))
+            dispatch(createGroupImage(group.newGroup.id, { url: groupImage, preview: true })).catch
             navigate(`/groups/${group.newGroup.id}`);
         }
 
-    }, [group.newGroup, dispatch, groupImage, hasSubmit, navigate])
+    }, [group.newGroup, dispatch, createGroupImage, groupImage, hasSubmit, navigate])
 
     useEffect(() => {
         if (location.search(',') !== -1) {
@@ -98,10 +85,10 @@ function CreateGroup() {
     }, [])
 
 
-    // useEffect(() => {
-    //     console.log("ERRORS: ", validationErrors)
+    useEffect(() => {
+        console.log("ERRORS: ", validationErrors)
 
-    // }, [validationErrors]);
+    }, [validationErrors]);
 
 
     return (
@@ -146,7 +133,7 @@ function CreateGroup() {
                         onChange={(e) => setName(e.target.value)}
 
                     />
-                    {validationErrors.name && <p className="errors">{validationErrors.name}</p>}
+                    {validationErrors.errors && validationErrors.errors.name && <p className="errors">{validationErrors.errors.name}</p>}
                 </div>
 
                 <div className="groupForm">
