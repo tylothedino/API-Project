@@ -8,11 +8,12 @@ import { useEffect, useState } from 'react';
 import DeleteGroupModal from './DeleteGroupModal';
 import { useModal } from '../../context/Modal';
 import { destroyGroup } from '../../store/features/group';
+// import event from '../../store/features/event';
 
 function SingleGroup() {
     const { groupId } = useParams();
     const { setModalContent, closeModal } = useModal();
-    const group = useSelector((state) => state.group[groupId]);
+    const group = useSelector((state) => state.group.oneGroup);
     const groupEventsList = useSelector((state) => state.group.events);
     const user = useSelector((state) => state.session.user);
 
@@ -23,12 +24,16 @@ function SingleGroup() {
     const dispatch = useDispatch();
     //Initialize the groups
     useEffect(() => {
-        dispatch(oneGroup(groupId));
+        // dispatch(oneGroup(groupId));
         dispatch(groupEvents(groupId));
 
         // dispatch(listMembers(groupId));
 
     }, [dispatch, groupId]);
+    useEffect(() => {
+        dispatch(oneGroup(groupId));
+
+    }, [dispatch, groupId])
 
     const groupImage = group && group.GroupImages && group.GroupImages.find((image) => image.preview);
 
@@ -38,7 +43,8 @@ function SingleGroup() {
     const [isOwner, setOwner] = useState(false);
 
     useEffect(() => {
-        if (user && group && group.Organizer) {
+        // console.log(group)
+        if (user && group) {
             setOwner(group.Organizer.id === user.id);
         }
     }, [user, group, dispatch])
@@ -106,11 +112,11 @@ function SingleGroup() {
 
     //=========================
 
-    const handleDeleteClick = (spotId) => {
+    const handleDeleteClick = (group_id) => {
         setModalContent(
             <div >
                 <DeleteGroupModal
-                    onDelete={() => handleDeleteConfirm(spotId)}
+                    onDelete={() => handleDeleteConfirm(group_id)}
                     onClose={closeModal}
                     message="Are you sure you want to remove this group?"
                     type="Group"
@@ -246,7 +252,7 @@ function SingleGroup() {
 
                                                         <h4 className='eventListSchedule' >{event.startDate.split(" ").join(" · ")}</h4>
                                                         <h3 className='eventListName' >{event.name}</h3>
-                                                        <h4 className='eventListLocation'>{event.Venue.city}, {event.Venue.state}</h4>
+                                                        <h4 className='eventListLocation'>{event.Venue && event.Venue.city}, {event.Venue && event.Venue.state}</h4>
 
                                                     </div>
 

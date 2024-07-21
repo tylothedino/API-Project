@@ -198,20 +198,20 @@ const group = (state = [], action) => {
             return state;
 
         case GET_ALL_GROUPS: {
-            const groupsState = [];
+            const groupList = [];
             action.groups.forEach((group) => {
-                groupsState[group.id] = group;
+                groupList[group.id] = group;
             })
 
-            return groupsState;
+            const groupState = { ...state, groupList: groupList }
+            return groupState;
 
-
+            // return groupList;
         }
 
         case GET_GROUP: {
             // console.log("ACTION: ", action)
-            const groupState = { ...state };
-            groupState[action.group.id] = action.group;
+            const groupState = { ...state, oneGroup: { ...action.group } };
             return groupState;
 
         }
@@ -223,7 +223,7 @@ const group = (state = [], action) => {
 
         case CREATE_GROUP: {
             const groupState = {
-                ...state, ...action.group
+                ...state, newGroup: action.group
             };
             return groupState;
         }

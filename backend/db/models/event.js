@@ -30,104 +30,104 @@ module.exports = (sequelize, DataTypes) => {
   Event.init({
     venueId: {
       type: DataTypes.INTEGER,
-      // validate: {
-      //   isVenueExists(value) {
-      //     return sequelize.models.Venue.findByPk(value)
-      //       .then((result) => {
-      //         if (!result) {
-      //           this.venueId = undefined;
-      //         }
-      //       });
-      //   }
-      // }
+      validate: {
+        isVenueExists(value) {
+          return sequelize.models.Venue.findByPk(value)
+            .then((result) => {
+              if (!result) {
+                this.venueId = undefined;
+              }
+            });
+        }
+      }
     },
     groupId: DataTypes.INTEGER,
     name: {
       type: DataTypes.STRING,
-      // allowNull: false,
-      // validate: {
-      //   atLeastFive(value) {
-      //     if (value.length < 5) {
-      //       throw new Error("Name must be at least 5 characters")
-      //     }
-      //   }
-      // }
+      allowNull: false,
+      validate: {
+        atLeastFive(value) {
+          if (value.length < 5) {
+            throw new Error("Name must be at least 5 characters")
+          }
+        }
+      }
     },
     description: {
       type: DataTypes.TEXT,
-      // allowNull: {
-      //   args: false,
-      //   msg: "Description is required"
-      // },
-      // validate: {
-      //   isNull(val) {
-      //     if (!val) {
-      //       throw new Error("Description is required");
-      //     }
-      //   }
-      // }
+      allowNull: {
+        args: false,
+        msg: "Description is required"
+      },
+      validate: {
+        isNull(val) {
+          if (!val) {
+            throw new Error("Description is required");
+          }
+        }
+      }
     },
     type: {
       type: DataTypes.ENUM,
       values: ['Online', 'In person'],
-      // allowNull: false,
-      // validate: {
-      //   checkType(value) {
-      //     if (value.toLowerCase() !== 'online' && value.toLowerCase() !== 'in person') {
-      //       throw new Error("Type must be Online or In person")
-      //     }
-      //   }
-      // }
+      allowNull: false,
+      validate: {
+        checkType(value) {
+          if (value.toLowerCase() !== 'online' && value.toLowerCase() !== 'in person') {
+            throw new Error("Type must be Online or In person")
+          }
+        }
+      }
     },
     capacity: {
       type: DataTypes.INTEGER,
-      // validate: {
-      //   isInt: true
-      // },
-      // allowNull: false,
-      // validate: {
-      //   checkInt(val) {
-      //     if (typeof val !== 'number') {
-      //       throw new Error("Capacity must be an integer")
-      //     }
-      //   }
-      // }
+      validate: {
+        isInt: true
+      },
+      allowNull: false,
+      validate: {
+        checkInt(val) {
+          if (typeof val !== 'number') {
+            throw new Error("Capacity must be an integer")
+          }
+        }
+      }
     },
     price: {
       type: DataTypes.FLOAT,
-      // validate: {
-      //   isValid(val) {
-      //     if (val < 0 || typeof val !== 'number') {
-      //       throw new Error("Price is invalid");
-      //     }
-      //   }
-      // }
+      validate: {
+        isValid(val) {
+          if (val < 0 || typeof val !== 'number') {
+            throw new Error("Price is invalid");
+          }
+        }
+      }
     },
     startDate: {
       type: DataTypes.DATE,
-      // validate: {
-      //   isFuture(val) {
-      //     const date = new Date();
-      //     if (date.getTime() > val.getTime() && val.getTime() === this.startDate.getTime()) {
-      //       throw new Error("Start date must be in the future");
-      //     }
-      //   },
-      //   isBeforeEnd(val) {
-      //     if (val.getTime() > this.endDate.getTime()) {
-      //       throw new Error("Your start date cannot be ahead of your end date")
-      //     }
-      //   }
-      // }
+      validate: {
+        isFuture(val) {
+          const date = new Date();
+          if (date.getTime() > val.getTime() && val.getTime() === this.startDate.getTime()) {
+            throw new Error("Start date must be in the future");
+          }
+        },
+        isBeforeEnd(val) {
+          if (val.getTime() > this.endDate.getTime()) {
+            throw new Error("Your start date cannot be ahead of your end date")
+          }
+        }
+      }
     },
     endDate: {
       type: DataTypes.DATE,
-      // validate: {
-      //   isFuture(val) {
-      //     if (val.getTime() <= this.startDate.getTime()) {
-      //       throw new Error("End date is less than start date");
-      //     }
-      //   }
-      // },
+      validate: {
+        isFuture(val) {
+          if (val.getTime() <= this.startDate.getTime()) {
+            throw new Error("End date is less than start date");
+          }
+        }
+      },
 
     },
   }, {

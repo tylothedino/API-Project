@@ -25,7 +25,13 @@ function CreateGroup() {
     const [urlError, setUrlError] = useState({});
     const [hasSubmit, setSubmit] = useState(false);
 
+    const user = useSelector((state) => state.session);
 
+    const newGroupFind = useSelector((state) => state.group.newGroup)
+    let newlymadegroup;
+    if (newGroupFind) {
+        newlymadegroup = newGroupFind.group;
+    }
     const group = useSelector((state) => state.group);
     const navigate = useNavigate();
 
@@ -33,11 +39,40 @@ function CreateGroup() {
 
     const fileType = ['.jpg', '.png', '.jpeg'];
 
+    const validate = () => {
+
+        let errors = {};
+
+        if (!fileType.find((type) => groupImage.slice(-6).includes(type))) {
+            errors.url = "Image URL must end in .png, .jpg, .jpeg";
+        }
+        if (!name) errors.name = "Name is required"
+        if (!location) errors.location = "Location is required"
+        // if (location.indexOf(',') === -1) errors.location = "Location is required"
+        const cityState = location.split(", ");
+        if (cityState[1] === '') errors.location = "Location is required"
+        if (cityState.length < 2) errors.location = "Location is required"
+        if (about.length < 50) errors.about = 'Description must be 50 characters or more ';
+        if (!type) errors.type = 'Type is required';
+        if (!groupPrivacy) errors.privacy = 'Visibility Type is required';
+
+        return errors;
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        setValidationErrors({});
+
+        const formErrors = validate();
+        if (Object.values(formErrors).length > 0) {
+            setValidationErrors(formErrors);
+            return;
+        }
+
         if (!fileType.find((type) => groupImage.slice(-6).includes(type))) {
             setUrlError({ error: "ERRORR" })
+            return;
 
         } else {
             setUrlError({})
@@ -51,30 +86,41 @@ function CreateGroup() {
             privacy = false;
         }
 
+
         dispatch(
             newGroup({
-                name, about, type, private: privacy, city, state
-            }, { groupImage, preview: true })
+                name, about, type, private: privacy, city, state, organizerId: user.user.id
+            }, { groupImage, preview: true, })
         ).catch(async (res) => {
             const data = await res.json();
             setValidationErrors({ ...data });
 
         });
-
-        if (Object.keys(validationErrors).length > 0) {
+        if (Object.keys(validationErrors).length === 0) {
             setSubmit(true);
         }
 
 
+
     }
 
+    // useEffect(() => {
+    //     console.log("GROUP ALL: (.newGroup) ", newGroupFind)
+    //     console.log("CREATED GROUP (.newGroup.group)", newlymadegroup)
+    // })
+
     useEffect(() => {
-        if (group.group && hasSubmit) {
-            setSubmit(false)
-            navigate(`/groups/${group.group.id}`);
+        // console.log("CREATED GROUP AFTER CREATE", newlymadegroup)
+        // console.log("GROUP: ", newGroupFind);
+
+        if (hasSubmit) {
+            setSubmit(false);
+            navigate(`/groups/${group.newGroup.group.id}`);
+
+
         }
 
-    }, [dispatch, hasSubmit, group.group, navigate])
+    }, [newlymadegroup, navigate])
 
     useEffect(() => {
         if (location.search(',') !== -1) {
@@ -123,7 +169,7 @@ function CreateGroup() {
                         }}
                     />
                     {
-                        (validationErrors.errors && validationErrors.errors.city || validationErrors.errors && validationErrors.errors.state) &&
+                        (validationErrors.errors && validationErrors.errors.city || validationErrors.errors && validationErrors.errors.state) || validationErrors.location &&
                         <p className="errors">Location is required</p>
                     }
                 </div>
@@ -142,7 +188,7 @@ function CreateGroup() {
                         onChange={(e) => setName(e.target.value)}
 
                     />
-                    {validationErrors.errors && validationErrors.errors.name && <p className="errors">{validationErrors.errors.name}</p>}
+                    {(validationErrors.errors && validationErrors.errors.name) || validationErrors.name && <p className="errors">Name is required</p>}
                 </div>
 
                 <div className="groupForm">
@@ -159,7 +205,7 @@ function CreateGroup() {
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
                     />
-                    {validationErrors.errors && validationErrors.errors.about && <p className="errors">{validationErrors.errors.about}</p>}
+                    {(validationErrors.errors && validationErrors.errors.about) || validationErrors.about && <p className="errors">Description must be 50 characters or more</p>}
                 </div>
 
                 <div className="groupForm">
@@ -180,7 +226,7 @@ function CreateGroup() {
 
                         </select>
 
-                        {validationErrors.errors && validationErrors.errors.type && <p className="errors">Group Type is required
+                        {(validationErrors.errors && validationErrors.errors.type) || validationErrors.type && <p className="errors">Group Type is required
                         </p>}
                     </div>
 
@@ -199,7 +245,7 @@ function CreateGroup() {
                             <option value={false}>Public</option>
 
                         </select>
-                        {validationErrors.errors && validationErrors.errors.private && <p className="errors">Visibility Type is required
+                        {(validationErrors.errors && validationErrors.errors.private) || validationErrors.privacy && <p className="errors">Visibility Type is required
                         </p>}
                     </div>
 
@@ -213,7 +259,7 @@ function CreateGroup() {
                             onChange={(e) => setImage(e.target.value)}
                         />
                         {
-                            Object.keys(urlError).length > 0 && <p className="errors">Image URL must end in .png, .jpg, or .jpeg</p>
+                            (Object.keys(urlError).length > 0) || validationErrors.url && <p className="errors">Image URL must end in .png, .jpg, or .jpeg</p>
                         }
 
                     </div>
@@ -223,8 +269,8 @@ function CreateGroup() {
 
 
                 <button type='submit'>Create Group</button>
-            </form>
-        </div>
+            </form >
+        </div >
 
 
     );

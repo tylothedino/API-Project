@@ -8,6 +8,15 @@ import { useEffect } from 'react';
 
 function Groups() {
     const groups = useSelector((state) => state.group);
+
+    let listOfGroups;
+
+    if (groups.groupList) {
+        listOfGroups = groups.groupList;
+
+    }
+
+    // console.log(listOfGroups)
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -18,11 +27,7 @@ function Groups() {
 
     }, [dispatch]);
 
-    let groupList;
 
-    if (groups) {
-        groupList = Object.values(groups);
-    }
 
     // console.log(groupList)
     //Redirect to group page - groupId is the id req.param
@@ -39,7 +44,7 @@ function Groups() {
     return (
         <div className='centerContainer'>
             {
-                groupList.map((group) => (
+                listOfGroups && listOfGroups.map((group) => (
                     <div key={`groupList${group.id}`} >
                         <div className='groupList' onClick={toGroup(group.id)} >
                             <div className='margin-top'>

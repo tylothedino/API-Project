@@ -44,7 +44,7 @@ function Events() {
         <div className='centerContainer'>
             {
                 eventList.map((event) => (
-                    <div key={`event${event.id}`}>
+                    <div key={`eventList${event.id}`}>
                         <div className='eventList' onClick={toEvent(event.id)} >
                             <div>
                                 {
@@ -54,11 +54,13 @@ function Events() {
 
                             <div className='meetupBody'>
 
-                                <h4 className='eventListSchedule'>{event.startDate.split(" ").join(" · ")}</h4>
+                                <h4 className='eventListSchedule'>{event.startDate && event.startDate.slice(0, 10) + ' · ' + event.startDate.slice(10)}</h4>
                                 <h3 className='eventListName' >{event.name}</h3>
-                                <h4 className='eventListLocation' >{event.venue && event.Venue.city}, {event.venue && event.Venue.state}</h4>
+                                <h4 className='eventListLocation' >{event.Group && event.Group.city}, {event.Group && event.Group.state}</h4>
 
                             </div>
+
+                            <p className='eventDescription'>{event && event.description}</p>
 
 
                         </div>

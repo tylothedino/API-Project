@@ -80,7 +80,7 @@ event.get('/', goodQuery, async (req, res, next) => {
 
     const Events = await Event.findAll({
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'price', 'description', 'capacity'],
+            exclude: ['createdAt', 'updatedAt', 'price', 'capacity'],
             // include: [
             //     [
             //         Sequelize.fn("COUNT", Sequelize.col("Attendances.eventId")), "numAttending",
@@ -185,7 +185,8 @@ event.get('/:eventId', async (req, res, next) => {
             {
                 model: Venue,
                 attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
-            }
+            },
+
         ],
         // group: ['Event.id']
     });

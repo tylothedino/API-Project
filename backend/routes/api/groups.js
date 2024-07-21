@@ -642,36 +642,14 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
 
     // return res.json(createEvent);
 
-    /*
-    let { group, image } = req.body
 
+    let { image, event } = req.body;
 
-    // return res.json(image.groupImage.slice(-6))
-    let newGroup = await Group.create(group)
+    let newEvent = await Event.create(event)
 
     let newImage
     if (image !== undefined) {
-        newImage = await GroupImage.create({ url: image.groupImage, preview: image.preview, groupId: newGroup.id })
-        return res.json({ image: newImage, group: newGroup })
-    }
-
-
-
-    return res.json({ group: newGroup })
-
-    */
-
-
-    let { image, event, eventId } = req.body;
-
-    //createEvent = await Event.create({
-    //         venueId, name, type, capacity, price, description, startDate, endDate, groupId
-    // return res.json(image.groupImage.slice(-6))
-    let newEvent = await Event.create({ ...event, eventId })
-
-    let newImage
-    if (image !== undefined) {
-        newImage = await EventImage.create({ ...image, eventId })
+        newImage = await EventImage.create({ url: image.eventImage, groupId: Number(event.groupId), preview: true })
         return res.json({ image: newImage, event: newEvent })
     }
 
