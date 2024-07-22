@@ -38,10 +38,10 @@ export const deleteEvent = (message) => ({
 //========================================THUNK ACTION CREATOR============================================
 export const allEvents = () => async (dispatch) => {
     const response = await csrfFetch('/api/events');
-
+    console.log("I MADE IT TO THE THUNK")
     if (response.ok) {
         const data = await response.json();
-        // console.log("DATA THUNK: ", data.Groups)
+        console.log("DATA THUNK: ", data)
         dispatch(getAllEvents(data.Events));
         return response;
     }
