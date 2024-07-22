@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { allGroups } from '../../store/features/group';
 import { useEffect } from 'react';
-// import { allEvents } from '../../store/features/event';
+import { allEvents } from '../../store/features/event';
 
 function Groups() {
     const groups = useSelector((state) => state.group);
@@ -23,7 +23,7 @@ function Groups() {
     //Initialize the groups
     useEffect(() => {
         dispatch(allGroups());
-        // dispatch(allEvents());
+        dispatch(allEvents());
 
     }, [dispatch]);
 
