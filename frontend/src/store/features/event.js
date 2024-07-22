@@ -43,6 +43,7 @@ export const allEvents = () => async (dispatch) => {
         const data = await response.json();
         // console.log("DATA THUNK: ", data.Groups)
         dispatch(getAllEvents(data.Events));
+        console.log("I MADE IT TO THUNK")
         return response;
     }
 

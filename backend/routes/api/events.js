@@ -53,7 +53,7 @@ const changeDate = (dateString) => {
 
 
 event.get('/', goodQuery, async (req, res, next) => {
-
+    console.log("I MADE IT TO API")
     let { page = 1, size = 20, name, type, startDate } = req.query;
     // page = parseInt(page);
     // size = parseInt(size);
@@ -108,7 +108,7 @@ event.get('/', goodQuery, async (req, res, next) => {
             },
 
         ],
-        ...options,
+        // ...options,
         group: ['Event.id'],
     });
 
