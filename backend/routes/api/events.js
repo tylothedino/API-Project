@@ -96,6 +96,7 @@ event.get('/', goodQuery, async (req, res, next) => {
                 model: EventImage,
                 attributes: [
                     ['url', 'previewImage'],
+                    'id'
                 ]
             },
             {
@@ -109,7 +110,7 @@ event.get('/', goodQuery, async (req, res, next) => {
 
         ],
         // ...options,
-        group: ['Event.id'],
+        group: ['Event.id', 'EventImages.id'],
     });
 
     const countPromises = Events.map(async event => {
