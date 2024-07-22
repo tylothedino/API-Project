@@ -23,7 +23,7 @@ function Groups() {
     //Initialize the groups
     useEffect(() => {
         dispatch(allGroups());
-        dispatch(allEvents());
+        // dispatch(allEvents());
 
     }, [dispatch]);
 
