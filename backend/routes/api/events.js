@@ -110,7 +110,7 @@ event.get('/', goodQuery, async (req, res, next) => {
 
         ],
         // ...options,
-        group: ['Event.id', 'EventImages.id'],
+        group: ['Event.id', 'EventImages.id', 'Group.id'],
     });
 
     const countPromises = Events.map(async event => {
