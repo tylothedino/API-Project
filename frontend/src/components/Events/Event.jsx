@@ -14,7 +14,7 @@ function Events() {
     useEffect(() => {
         dispatch(allEvents());
 
-    }, [dispatch]);
+    }, [dispatch, navigate]);
 
     let eventList;
 
@@ -39,25 +39,101 @@ function Events() {
 
     }
 
+    const pastEvents = eventList.filter((date) => {
+        const today = new Date;
+        const eventDate = new Date(date.startDate)
+        return eventDate < today;
+    }).sort(compareDates);
+
+    const futureEvents = eventList.filter((date) => {
+        const today = new Date;
+        const eventDate = new Date(date.startDate)
+        return eventDate > today;
+    }).sort(compareDates);
+
 
     return (
         <div className='centerContainer'>
-            {
+            {/* {
                 eventList.map((event) => (
                     <div key={`eventList${event.id}`}>
                         <div className='eventList' onClick={toEvent(event.id)} >
-                            <div>
-                                {
-                                    event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' /> : ''
-                                }
+                            <div className='eventimageinfo'>
+                                <div>
+                                    {
+                                        event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' /> : ''
+                                    }
+                                </div>
+
+                                <div className='meetupBody'>
+
+                                    <h4 className='eventListSchedule'>{event.startDate && event.startDate.slice(0, 10) + ' · ' + event.startDate.slice(10)}</h4>
+                                    <h3 className='eventListName' >{event.name}</h3>
+                                    <h4 className='eventListLocation' >{event.Group && event.Group.city}, {event.Group && event.Group.state}</h4>
+
+                                </div>
                             </div>
 
-                            <div className='meetupBody'>
+                            <p className='eventDescription'>{event && event.description}</p>
 
-                                <h4 className='eventListSchedule'>{event.startDate && event.startDate.slice(0, 10) + ' · ' + event.startDate.slice(10)}</h4>
-                                <h3 className='eventListName' >{event.name}</h3>
-                                <h4 className='eventListLocation' >{event.Group && event.Group.city}, {event.Group && event.Group.state}</h4>
 
+                        </div>
+
+
+                    </div>
+                ))
+            } */}
+
+            {
+                futureEvents.map((event) => (
+                    <div key={`eventList${event.id}`}>
+                        <div className='eventList' onClick={toEvent(event.id)} >
+                            <div className='eventimageinfo'>
+                                <div>
+                                    {
+                                        event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' /> : ''
+                                    }
+                                </div>
+
+                                <div className='meetupBody'>
+
+                                    <h4 className='eventListSchedule'>{event.startDate && event.startDate.slice(0, 10) + ' · ' + event.startDate.slice(10)}</h4>
+                                    <h3 className='eventListName' >{event.name}</h3>
+                                    <h4 className='eventListLocation' >{event.Group && event.Group.city}, {event.Group && event.Group.state}</h4>
+
+                                </div>
+                            </div>
+
+                            <p className='eventDescription'>{event && event.description}</p>
+
+
+                        </div>
+
+
+                    </div>
+                ))
+            }
+
+            {pastEvents.length > 0 ? <h2>Past Events</h2> : " "}
+            {
+
+                pastEvents.map((event) => (
+                    <div key={`eventList${event.id}`}>
+                        <div className='eventList' onClick={toEvent(event.id)} >
+                            <div className='eventimageinfo'>
+                                <div>
+                                    {
+                                        event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' /> : ''
+                                    }
+                                </div>
+
+                                <div className='meetupBody'>
+
+                                    <h4 className='eventListSchedule'>{event.startDate && event.startDate.slice(0, 10) + ' · ' + event.startDate.slice(10)}</h4>
+                                    <h3 className='eventListName' >{event.name}</h3>
+                                    <h4 className='eventListLocation' >{event.Group && event.Group.city}, {event.Group && event.Group.state}</h4>
+
+                                </div>
                             </div>
 
                             <p className='eventDescription'>{event && event.description}</p>

@@ -47,7 +47,8 @@ function CreateEvent() {
         if (!fileType.find((type) => eventImage.slice(-6).includes(type))) {
             errors.url = "Image URL must end in .png, .jpg, .jpeg";
         }
-        if (!name) errors.name = "Name is required"
+        if (!name) errors.name = "Name is required";
+        if (name.length < 5) errors.name = 'Name must be at least 5 characters'
         if (!description) errors.description = "Description is required"
         if (description.length < 50) errors.description = 'Description must be 50 characters or more ';
         if (!type) errors.type = 'Type is required';
@@ -102,6 +103,8 @@ function CreateEvent() {
         */
 
         // console.log(eventImage)
+
+
         const groupNumber = Number(groupId);
         dispatch(
 
@@ -113,11 +116,7 @@ function CreateEvent() {
             setValidationErrors({ ...data });
 
         });
-
-        if (Object.keys(validationErrors).length === 0) {
-            setSubmit(true);
-        }
-
+        setSubmit(true);
 
     }
     // useEffect(() => {
@@ -132,12 +131,12 @@ function CreateEvent() {
             navigate(`/events/${event.event.id}`);
         }
 
-    }, [event.event])
+    }, [event.event, navigate])
 
 
 
     useEffect(() => {
-        document.title = "Start a new group"
+        document.title = "Create a new event"
     }, [])
 
 
@@ -161,7 +160,7 @@ function CreateEvent() {
                     </p>
                     <input
                         type='text'
-                        placeholder="What is your group name?"
+                        placeholder="What is the name of your event?"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
 
@@ -235,7 +234,7 @@ function CreateEvent() {
 
                 <div className="groupForm">
                     <div className="dropDownForm">
-                        <h3>Please add an image url for your group below:</h3>
+                        <h3>Please add an image url for your event below:</h3>
                         <input
                             type='text'
 
@@ -252,10 +251,11 @@ function CreateEvent() {
                 <div className="groupForm">
                     <div className="dropDownForm">
                         <h3>Please describe your event:</h3>
-                        <input
-                            className="largeText"
-                            type='text'
+                        <textarea
+                            className="detailForm"
+
                             value={description}
+                            placeholder="Please include at least 30 characters"
                             onChange={(e) => setDescription(e.target.value)}
                         />
                         {(validationErrors.errors && validationErrors.errors.description) || (validationErrors && validationErrors.description) && <p className="errors">{validationErrors.description}</p>}

@@ -133,17 +133,19 @@ function SingleGroup() {
                         &lt; <NavLink className='groupNav' to='/groups'>Groups</NavLink>
                     </p>
 
-                    <div className='singleGroupContent'>
+                    <div className='singleGroupContented'>
                         <div className='groupImage'>
-                            {groupImage ? <img src={groupImage && `${groupImage.url}`}></img> : <img src="null"></img>}
+                            {groupImage ? <img src={groupImage && `${groupImage.url}`} className='groupMainImage'></img> : <img src="null"></img>}
                         </div>
                         <div className='groupContent'>
-                            <h2 className='groupName'>{group && group.name}</h2>
+                            <div>
+                                <h2 className='groupName'>{group && group.name}</h2>
 
-                            <div className='groupDesc'>
-                                <h3>{group && group.city + ", " + group.state}</h3>
-                                <h3>{group && group.eventCount} event(s) · {group && group.private ? " Private" : " Public"}</h3>
-                                <h3>Organized by {group && group.Organizer && (group.Organizer.firstName + " " + group.Organizer.lastName)}</h3>
+                                <div className='groupDesc'>
+                                    <h3>{group && group.city + ", " + group.state}</h3>
+                                    <h3>{group && group.eventCount} event(s) · {group && group.private ? " Private" : " Public"}</h3>
+                                    <h3>Organized by {group && group.Organizer && (group.Organizer.firstName + " " + group.Organizer.lastName)}</h3>
+                                </div>
                             </div>
 
                             {
@@ -158,8 +160,8 @@ function SingleGroup() {
                                     </div>
                                     :
                                     user && !isOwner ?
-                                        <div className='actions'>
-                                            <button onClick={joinGroupPop}>Join this group</button>
+                                        <div className='joingroup'>
+                                            <button className='joingroup' onClick={joinGroupPop}>Join this group</button>
                                         </div>
                                         :
                                         <></>
@@ -193,23 +195,25 @@ function SingleGroup() {
                             <>
                                 <h2 className='organizerHeader'> Upcoming Events {`(${upcomingEvent.length})`}</h2>
 
-                                <div className='groupEventList'>
+                                <div className='groupEventList' >
                                     {
                                         upcomingEvent.map((event) => (
-                                            <div key={`event${event.id}`}>
+                                            <div key={`event${event.id}`} onClick={toEvent(event.id)}>
                                                 <div className='eventList'>
-                                                    <div>
-                                                        {
-                                                            event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' onClick={toEvent(event.id)} /> : ''
-                                                        }
-                                                    </div>
+                                                    <div className='eventdetailsSingle'>
+                                                        <div>
+                                                            {
+                                                                event.previewImage !== 'None' ? <img src={`${event.previewImage}`} className='eventListImage' onClick={toEvent(event.id)} /> : ''
+                                                            }
+                                                        </div>
 
-                                                    <div className='meetupBody'>
+                                                        <div className='meetupBody'>
 
-                                                        <h4 className='eventListSchedule' onClick={toEvent(event.id)}>{event.startDate.split(" ").join(" · ")}</h4>
-                                                        <h3 className='eventListName' onClick={toEvent(event.id)}>{event.name}</h3>
-                                                        <h4 className='eventListLocation' onClick={toEvent(event.id)}>{event.Venue && event.Venue.city}, {event.Venue && event.Venue.state}</h4>
+                                                            <h4 className='eventListSchedule' onClick={toEvent(event.id)}>{event.startDate.split(" ").join(" · ")}</h4>
+                                                            <h3 className='eventListName' onClick={toEvent(event.id)}>{event.name}</h3>
+                                                            <h4 className='eventListLocation' onClick={toEvent(event.id)}>{event.Venue && event.Venue.city}, {event.Venue && event.Venue.state}</h4>
 
+                                                        </div>
                                                     </div>
                                                     <p className='description' onClick={toEvent(event.id)}>
                                                         {event.description}

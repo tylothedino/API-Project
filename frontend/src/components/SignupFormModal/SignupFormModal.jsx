@@ -44,7 +44,7 @@ const SignupFormModal = () => {
                 .catch(async (res) => {
                     const data = await res.json();
                     setValidationErrors(data);
-                    // console.log(data);
+
 
                 });
         }
@@ -74,6 +74,7 @@ const SignupFormModal = () => {
         setConfirmPassword('');
     };
 
+
     return (
         <div className="signupBox">
             <form onSubmit={handleSubmit}>
@@ -83,8 +84,9 @@ const SignupFormModal = () => {
                     {validationErrors.errors && <p className="errors">{validationErrors.errors.firstName}</p>}
                     {validationErrors.errors && <p className="errors">{validationErrors.errors.lastName}</p>}
 
-                    {validationErrors.errors && <p className="errors">{validationErrors.errors.email}</p>}
+                    {validationErrors.errors && <p className="errors">The provided email is invalid</p>}
                     {validationErrors.errors && <p className="errors">{validationErrors.errors.username}</p>}
+                    {validationErrors.message && <p className="errors">{validationErrors.message}</p>}
 
                     {validationErrors.errors && <p className="errors">{validationErrors.errors.password}</p>}
                     {validationErrors.confirmPassword && <p className="errors">{validationErrors.confirmPassword}</p>}
@@ -161,7 +163,7 @@ const SignupFormModal = () => {
 
                 </div>
 
-                <button type='submit' id='signupsubmitbutton' hidden={buttonDisabled}>Sign Up</button>
+                <button type='submit' id='signupsubmitbutton' disabled={buttonDisabled}>Sign Up</button>
             </form>
         </div>
     );

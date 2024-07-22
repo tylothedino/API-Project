@@ -33,8 +33,13 @@ function Layout() {
 
   }, [dispatch])
 
+
+  useEffect(() => {
+    document.title = 'Meetup';
+  }, []);
   return (
     <>
+
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>

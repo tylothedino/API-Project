@@ -25,6 +25,17 @@ module.exports = {
           endDate: "2024-11-19 22:00:00",
         },
         {
+          venueId: 1,
+          groupId: 1,
+          name: "Tennis Group First Meet and Greet",
+          type: "Online",
+          capacity: 10,
+          price: 18.50,
+          description: "The first meet and greet for our group! Come say hello!",
+          startDate: "2023-11-19 20:00:00",
+          endDate: "2023-11-19 22:00:00",
+        },
+        {
           venueId: 2,
           groupId: 2,
           name: "Basketball Group First Meet and Greet",

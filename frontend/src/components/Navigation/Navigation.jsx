@@ -39,7 +39,7 @@ function Navigation({ isLoaded }) {
     const sessionLinks = sessionUser ? (
         <>
             <div className='profileNav'>
-                <NavLink to='/groups/new'>Start a new group</NavLink>
+                <NavLink className='startgroupnav' to='/groups/new'>Start a new group</NavLink>
                 <ProfileButton user={sessionUser} />
             </div>
             {/* <li>
@@ -48,14 +48,16 @@ function Navigation({ isLoaded }) {
         </>
     ) : (
         <>
-            <div>
+            <div className='navbutton'>
                 <OpenModalButton
                     buttonText="Log In"
                     modalComponent={<LoginFormModal />}
+                    className='logIn'
                 />
             </div>
-            <div>
+            <div className='navbutton'>
                 <OpenModalButton
+                    className='signUp'
                     buttonText="Sign Up"
                     modalComponent={<SignupFormModal />}
                 />

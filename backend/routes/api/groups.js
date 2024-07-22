@@ -649,7 +649,7 @@ group.post('/:groupId/events', [requireAuth], async (req, res, next) => {
 
     let newImage
     if (image !== undefined) {
-        newImage = await EventImage.create({ url: image.eventImage, groupId: Number(event.groupId), preview: true })
+        newImage = await EventImage.create({ url: image.eventImage, eventId: Number(newEvent.id), preview: true })
         return res.json({ image: newImage, event: newEvent })
     }
 

@@ -18,20 +18,17 @@ function CreateGroup() {
 
     const [groupImage, setImage] = useState('');
 
-
-
-
     const [validationErrors, setValidationErrors] = useState({});
     const [urlError, setUrlError] = useState({});
     const [hasSubmit, setSubmit] = useState(false);
 
     const user = useSelector((state) => state.session);
 
-    const newGroupFind = useSelector((state) => state.group.newGroup)
-    let newlymadegroup;
-    if (newGroupFind) {
-        newlymadegroup = newGroupFind.group;
-    }
+    // const newGroupFind = useSelector((state) => state.group.newGroup)
+    // let newlymadegroup;
+    // if (newGroupFind) {
+    //     newlymadegroup = newGroupFind.group;
+    // }
     const group = useSelector((state) => state.group);
     const navigate = useNavigate();
 
@@ -52,7 +49,7 @@ function CreateGroup() {
         const cityState = location.split(", ");
         if (cityState[1] === '') errors.location = "Location is required"
         if (cityState.length < 2) errors.location = "Location is required"
-        if (about.length < 50) errors.about = 'Description must be 50 characters or more ';
+        if (about.length < 30) errors.about = 'Description must be 30 characters or more ';
         if (!type) errors.type = 'Type is required';
         if (!groupPrivacy) errors.privacy = 'Visibility Type is required';
 
@@ -96,9 +93,15 @@ function CreateGroup() {
             setValidationErrors({ ...data });
 
         });
-        if (Object.keys(validationErrors).length === 0) {
+        
             setSubmit(true);
-        }
+
+
+
+        // console.log("NEW MADE: ", newGroups)
+        // if (hasSubmit) {
+        //     navigate(`/groups/${newGroups.id}`);
+        // }
 
 
 
@@ -107,20 +110,23 @@ function CreateGroup() {
     // useEffect(() => {
     //     console.log("GROUP ALL: (.newGroup) ", newGroupFind)
     //     console.log("CREATED GROUP (.newGroup.group)", newlymadegroup)
+    //     console.log("CURRENT INDEX GROUP: ", groupMade);
     // })
 
     useEffect(() => {
         // console.log("CREATED GROUP AFTER CREATE", newlymadegroup)
         // console.log("GROUP: ", newGroupFind);
 
-        if (hasSubmit) {
+
+        if (hasSubmit && (group.newGroup)) {
+
             setSubmit(false);
             navigate(`/groups/${group.newGroup.group.id}`);
 
 
         }
 
-    }, [newlymadegroup, navigate])
+    }, [group.newGroup, navigate])
 
     useEffect(() => {
         if (location.search(',') !== -1) {
@@ -199,13 +205,14 @@ function CreateGroup() {
                         <li>Who should join?</li>
                         <li>What will you do at your events</li>
                     </ol>
+
                     <textarea
                         className="detailForm"
-                        placeholder="Please write at least 50 characters"
+                        placeholder="Please write at least 30 characters"
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
                     />
-                    {(validationErrors.errors && validationErrors.errors.about) || validationErrors.about && <p className="errors">Description must be 50 characters or more</p>}
+                    {(validationErrors.errors && validationErrors.errors.about) || validationErrors.about && <p className="errors">Description must be 30 characters or more</p>}
                 </div>
 
                 <div className="groupForm">

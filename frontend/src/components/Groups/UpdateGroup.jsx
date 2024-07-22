@@ -26,9 +26,9 @@ function UpdateGroup() {
     }, [groupId, dispatch])
 
     useEffect(() => {
-        if (!hasSubmit && group[groupId]) {
-            const { name, about, type, city, state } = group[groupId];
-            const privacy = group[groupId].private
+        if (!hasSubmit && group.oneGroup) {
+            const { name, about, type, city, state } = group.oneGroup;
+            const privacy = group.oneGroup.private
             setName(name || '');
             setAbout(about || '');
             setType(type || '');
@@ -46,12 +46,24 @@ function UpdateGroup() {
 
     const navigate = useNavigate();
 
+    // useEffect(() => {
+    //     console.log(name)
+    //     console.log(about)
+    //     console.log(groupId)
+    //     console.log("PRIVACY ", groupPrivacy)
+    // })
+
+    const user = useSelector((state) => state.session)
+
     useEffect(() => {
-        console.log(name)
-        console.log(about)
-        console.log(groupId)
-        console.log("PRIVACY ", groupPrivacy)
-    })
+        if (!user.user) {
+            navigate("/");
+        }
+        if (group.oneGroup && (user.user.id !== group.oneGroup.organizerId)) {
+            navigate("/");
+        }
+
+    }, [user, navigate])
 
 
     const handleSubmit = (e) => {
@@ -84,12 +96,6 @@ function UpdateGroup() {
     useEffect(() => {
         document.title = "Start a new group"
     }, [])
-
-
-    useEffect(() => {
-        console.log(type)
-    })
-
 
     const handleChangePrivate = (e) => {
         if (e.target.value === 'false') {

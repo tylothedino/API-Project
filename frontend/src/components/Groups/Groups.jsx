@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { allGroups } from '../../store/features/group';
 import { useEffect } from 'react';
-
+import { allEvents } from '../../store/features/event';
 
 function Groups() {
     const groups = useSelector((state) => state.group);
@@ -23,7 +23,7 @@ function Groups() {
     //Initialize the groups
     useEffect(() => {
         dispatch(allGroups());
-        // console.log(groups)
+        dispatch(allEvents());
 
     }, [dispatch]);
 
@@ -47,7 +47,7 @@ function Groups() {
                 listOfGroups && listOfGroups.map((group) => (
                     <div key={`groupList${group.id}`} >
                         <div className='groupList' onClick={toGroup(group.id)} >
-                            <div className='margin-top'>
+                            <div className='margin-top imagepreveiw'>
                                 {
                                     group.previewImage !== "No preview images available" ?
                                         <img src={`${group.previewImage}`} className='eventListImage' />

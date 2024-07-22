@@ -120,7 +120,7 @@ export const newGroup = (group, image) => async (dispatch) => {
 
     const data = await response.json();
     dispatch(createGroup(data));
-
+    // console.log("DATA: ", data)
     return response;
 
 };

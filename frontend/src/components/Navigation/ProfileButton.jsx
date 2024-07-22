@@ -42,7 +42,10 @@ function ProfileButton({ user }) {
     };
 
     const toGroup = () => {
-        return nav("/groups/")
+        return nav("/groups")
+    }
+    const toEvents = () => {
+        return nav("/events")
     }
 
     const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -60,12 +63,14 @@ function ProfileButton({ user }) {
                     <li>{user.email}</li>
                 </div>
                 <div className='partition'>
-                    <button className='profileButton' onClick={toGroup}>All groups</button>
+                    <button className='profileButton' onClick={toGroup}>View groups</button>
+                    <button className='profileButton' onClick={toEvents}>View events</button>
                 </div>
+                <div></div>
                 <div className='partition noBottom'>
-                    <li>
-                        <button className='profileButton' onClick={logout}>Log Out</button>
-                    </li>
+
+                    <button className='profileButton' onClick={logout}>Log Out</button>
+
                 </div>
 
             </ul>

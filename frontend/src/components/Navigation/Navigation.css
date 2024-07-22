@@ -57,9 +57,10 @@ NavLink {
 
 .eventGroupNav {
     display: flex;
-    min-width: 769px;
     padding-top: 4rem;
     border-bottom: solid lightgray;
+    min-width: 930px;
+
 }
 
 .eventMeetupTitle {
@@ -82,5 +83,16 @@ NavLink {
 }
 
 .profileButton {
-    padding: 0;
+    margin: 5px;
+
+}
+
+
+.navbutton button {
+    margin-left: 3rem;
+    font-size: large;
+}
+
+.userNav button:hover {
+    text-decoration: underline;
 }

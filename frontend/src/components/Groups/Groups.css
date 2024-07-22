@@ -16,10 +16,7 @@
 }
 
 .meetupBody {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    margin-left: 20px;
+
     width: 100%;
     word-break: break-all;
 
@@ -45,9 +42,10 @@
     font-size: medium;
 }
 
-.singleGroupContent {
+.singleGroupContented {
     display: flex;
     justify-content: space-evenly;
+    width: 80rem;
 }
 
 .header {
@@ -66,13 +64,14 @@
     display: flex;
     justify-content: center;
     margin-bottom: 2em;
+    width: 100%;
 
 }
 
 .detailsContainer {
     background-color: rgba(238, 237, 237, 0.998);
     display: flex;
-
+    align-items: center;
     flex-direction: column;
 }
 
@@ -80,6 +79,7 @@
     display: flex;
     flex-direction: column;
     align-content: center;
+    width: 90rem;
 }
 
 .groupInfo {
@@ -88,6 +88,8 @@
 
 .eventList {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .groupEventList .eventList {
@@ -161,6 +163,10 @@ form select {
     box-shadow: 2px 2px 2px black;
 }
 
+.actions button:hover {
+    cursor: pointer;
+}
+
 .deleteBox {
     display: flex;
     flex-direction: column;
@@ -201,6 +207,46 @@ form select {
     flex-direction: column;
 }
 
-.modal-content{
+.modal-content {
     width: 100%;
+}
+
+
+.eventListImage {
+    width: 15rem;
+
+}
+
+.imagepreveiw {
+    display: flex;
+    align-items: center;
+}
+
+.groupContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+.eventdetailsSingle {
+    display: flex;
+}
+
+
+.joingroup button {
+    background-color: red;
+    color: white;
+    height: 3rem;
+    width: 10rem;
+    font-size: large;
+    box-shadow: 2px 2px 2px black;
+}
+
+.joingroup button:hover {
+    cursor: pointer;
+}
+
+.groupMainImage {
+    width: 40rem;
 }

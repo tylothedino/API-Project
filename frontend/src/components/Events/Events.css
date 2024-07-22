@@ -1,12 +1,22 @@
 .eventList {
-    min-width: 46%;
     border-bottom: solid lightgray;
     padding-bottom: 1.25rem;
     margin-top: 1.25rem;
     display: flex;
 
-
+    flex-direction: column;
     /* align-content: center; */
+}
+
+.eventimageinfo {
+    display: flex;
+
+}
+
+.eventDescription {
+    padding-left: 20px;
+    line-break: auto;
+    word-break: break-all;
 }
 
 .eventList:hover {
@@ -16,11 +26,12 @@
 .meetupBody {
     display: flex;
     flex-direction: column;
-    justify-content: left;
     max-width: auto;
     margin-left: 1em;
 
 }
+
+
 
 .centerContainer {
     min-width: 780px;
@@ -30,7 +41,7 @@
 
 .singleGroupContent {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     min-width: 100%;
 }
 
@@ -52,12 +63,13 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    padding-bottom: 30px;
 }
 
 .details {
     display: flex;
     flex-direction: column;
-    max-width: 65%;
+    max-width: 80%;
 }
 
 .groupInfo {
@@ -86,9 +98,8 @@
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
     flex-direction: column;
-    width: 55%;
-
-
+    width: 80%;
+    /* justify-content: center; */
 }
 
 .eventContainer {
@@ -98,10 +109,14 @@
     margin-top: 3rem;
 }
 
+.eventsContainer {
+    width: 80%
+}
+
 .eventInformation {
     display: flex;
-    height: 100%;
-    /* justify-content: space-evenly; */
+    height: 40rem;
+    justify-content: space-around;
 }
 
 .center {
@@ -115,22 +130,12 @@
 }
 
 .scheduleAndGroup {
-
     display: flex;
-    justify-content: start;
-
     flex-direction: column;
-    width: 50em;
-    height: fit-content;
-
+    width: 50%;
+    justify-content: center;
 }
 
-.groupImage img {
-    max-width: auto;
-    max-height: 80%;
-
-
-}
 
 .groupTitle {
     text-wrap: wrap;
@@ -140,6 +145,8 @@
 .groupImage {
     display: flex;
     align-items: center;
+    justify-content: center;
+
 }
 
 .eventGroupInfo {
@@ -153,15 +160,18 @@
 
 }
 
+.eventGroupInfo:hover {
+    cursor: pointer;
+}
+
 .eventGroupInfoDetails {
     display: flex;
     margin: 1rem;
     background-color: white;
     border-radius: 25px;
-    max-height: 35%;
     padding-left: 2em;
-    min-height: 35%;
     flex-direction: column;
+    padding-bottom: 30px;
 }
 
 
@@ -192,14 +202,48 @@ h5 {
 
 .schedule {
     display: flex;
+    margin-top: 2rem;
 }
 
-.mainImg {
-    width: 100%
-}
 
 .full {
     width: 100%;
     padding: 3rem;
     background-color: lightgray;
+    display: flex;
+    justify-content: center;
+}
+
+.organizerHeader {
+    word-break: break-all;
+}
+
+.eventHost {
+    color: gray
+}
+
+.groupPreviewImg {
+    max-width: 15rem;
+    max-height: 80%;
+}
+
+.scheduleDetails {
+    padding-left: 1rem;
+    color: teal;
+}
+
+.schedule h3 {
+    display: flex;
+    align-items: center;
+    margin-right: .5rem;
+    color: gray;
+}
+
+.price h3 {
+    color: gray;
+}
+
+
+.location h3 {
+    color: gray;
 }

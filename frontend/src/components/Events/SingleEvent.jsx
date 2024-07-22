@@ -85,12 +85,12 @@ function SingleEvent() {
                 <div className='singleEventContent'>
 
                     <div className='eventInformation'>
-                        {event.eventDetails && event.eventDetails.previewImage ? <img className='mainImg' src={event.eventDetails && event.eventDetails.previewImage} /> : <img className='mainImg' src="null"></img>}
+                        {event.eventDetails && event.eventDetails.previewImage ? <img className='mainImg maxheight' src={event.eventDetails && event.eventDetails.previewImage} /> : <img className='mainImg' src="null"></img>}
 
                         <div className='scheduleAndGroup'>
                             <div className='eventGroupInfo' onClick={toGroup(groupId)}>
                                 <div className='groupImage'>
-                                    {event.oneGroup && event.oneGroup.GroupImages ? <img className='mainImg' src={event.oneGroup && event.oneGroup.GroupImages[0].url} /> : <img className='mainImg' src="null"></img>}
+                                    {event.oneGroup && event.oneGroup.GroupImages ? <img className='groupPreviewImg' src={event.oneGroup && event.oneGroup.GroupImages[0].url} /> : <img className='groupPreviewImg' src="null"></img>}
 
                                 </div>
                                 <div className='groupInformation'>
@@ -107,14 +107,14 @@ function SingleEvent() {
                                         <h3>END </h3>
                                     </div>
                                     <div className='scheduleDetails'>
-                                        <h4 className='time'> {event.eventDetails && event.eventDetails.startDate}</h4>
-                                        <h4 className='time'> {event.eventDetails && event.eventDetails.endDate}</h4>
+                                        <h4 className='time'> {event.eventDetails && event.eventDetails.startDate.split(' ').join(" · ")}</h4>
+                                        <h4 className='time'> {event.eventDetails && event.eventDetails.endDate.split(' ').join(" · ")}</h4>
                                     </div>
 
                                 </div>
 
                                 <div className='price'>
-                                    <h3> {event.eventDetails && (event.eventDetails.price <= 0 ? "FREE" : ("💵" + Number(event.eventDetails.price).toFixed(2)))}</h3>
+                                    <h3> {event.eventDetails && (event.eventDetails.price <= 0 ? "FREE" : ("💵 " + "$" + Number(event.eventDetails.price).toFixed(2)))}</h3>
                                 </div>
 
                                 <div className='location'>
@@ -126,6 +126,11 @@ function SingleEvent() {
                                     {
 
                                         (group && user && group.Organizer.id === user.id) ? < button onClick={() => handleDeleteClick(eventId)}>Delete</button> : ""
+                                    }
+
+                                    {
+
+                                        (group && user && group.Organizer.id === user.id) ? < button >Update</button> : ""
                                     }
 
                                 </div>
